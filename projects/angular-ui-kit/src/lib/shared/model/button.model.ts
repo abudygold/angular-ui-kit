@@ -32,5 +32,6 @@ export class ButtonModel {
 		public link: string = '',
 		public icon: string = '',
 		public iconPosition: IconPosition = 'start',
+		public imageIcon: string = '',
 	) {}
 }
