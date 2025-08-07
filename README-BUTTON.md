@@ -15,9 +15,29 @@ export const EXAMPLE_BUTTON_CONST: ButtonModel = new ButtonModel(
 	'primary',
 	false,
 	'tw-w-full !tw-h-10',
+);
+
+export const EXAMPLE_BUTTON_WITH_ICON_CONST: ButtonModel = new ButtonModel(
+	'stroked',
+	'Back to login',
+	'primary',
+	false,
+	'tw-w-full !tw-h-10',
 	'',
 	'arrow_back',
 	'start',
+);
+
+export const EXAMPLE_BUTTON_WITH_IMAGE_ICON_CONST: ButtonModel = new ButtonModel(
+	'flat',
+	'Hubungi Kami',
+	'primary',
+	false,
+	'!tw-h-10',
+	'',
+	'',
+	'start',
+	'./icons/socmed/whatsapp-white.svg',
 );
 ```
 
@@ -62,16 +82,17 @@ Add the component to your template and bind your data:
 
 ### 4. API
 
-| Input          | Type                                                                                   | Description                                                            |
-| -------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `variant`      | 'basic' / 'raised' / 'flat' / 'icon' / 'stroked' / 'fab' / 'mini-fab' / 'extended-fab' | The type of the button. Defaults to 'basic'                            |
-| `label`        | string                                                                                 | The label text displayed on the button. Defaults to 'Button'.          |
-| `color`        | 'primary' / 'secondary' / 'secondary-gray' / 'tertiary' / 'link'                       | Defines the text color of the button. Defaults to 'primary'.           |
-| `disabled`     | boolean                                                                                | Indicates whether the button is disabled. Defaults to false.           |
-| `buttonClass`  | string                                                                                 | Custom class for the button. Defaults to an empty string.              |
-| `link`         | string                                                                                 | The URL or route the button navigates to. Defaults to an empty string. |
-| `icon`         | string                                                                                 | The icon associated with the button. Defaults to an empty string.      |
-| `iconPosition` | 'start' / 'end'                                                                        | The position of the icon relative to the label. Defaults to 'start'.   |
+| Input          | Type                                                                                   | Description                                                             |
+| -------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `variant`      | 'basic' / 'raised' / 'flat' / 'icon' / 'stroked' / 'fab' / 'mini-fab' / 'extended-fab' | The type of the button. Defaults to 'basic'                             |
+| `label`        | string                                                                                 | The label text displayed on the button. Defaults to 'Button'.           |
+| `color`        | 'primary' / 'secondary' / 'secondary-gray' / 'tertiary' / 'link'                       | Defines the text color of the button. Defaults to 'primary'.            |
+| `disabled`     | boolean                                                                                | Indicates whether the button is disabled. Defaults to false.            |
+| `buttonClass`  | string                                                                                 | Custom class for the button. Defaults to an empty string.               |
+| `link`         | string                                                                                 | The URL or route the button navigates to. Defaults to an empty string.  |
+| `icon`         | string                                                                                 | The icon associated with the button. Defaults to an empty string.       |
+| `iconPosition` | 'start' / 'end'                                                                        | The position of the icon relative to the label. Defaults to 'start'.    |
+| `imageIcon`    | string                                                                                 | The image icon associated with the button. Defaults to an empty string. |
 
 ---
 
