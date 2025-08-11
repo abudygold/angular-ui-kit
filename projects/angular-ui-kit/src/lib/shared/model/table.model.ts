@@ -2,18 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { signal } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-type FilterRequestPayload = Partial<{
-	page: number;
-	limit: number;
-	sort: string;
-	order: 'asc' | 'desc' | '';
-	filters: {
-		[key: string]: any;
-	};
-}> & { [k: string]: any };
-
 type DataType = 'date' | 'number' | 'title' | 'currency' | 'custom' | '';
-type FilterOptions = FilterRequestPayload;
 const TablePageIndexDefaultConst = 0;
 const TablePageSizeDefaultConst = 10;
 
@@ -27,8 +16,8 @@ export class TableModel {
 	public dataTotal: number;
 	public pageIndex: number;
 	public pageSize: number;
-	public sortKey: string = '';
-	public sortOrder: 'asc' | 'desc' | '';
+	public sortActive: string = '';
+	public sortDirection: 'asc' | 'desc' | '';
 	public selection: SelectionModel<any> = new SelectionModel<any>(true, []);
 	public tableClass: string = '';
 
@@ -37,14 +26,7 @@ export class TableModel {
 	isSorter = signal(true);
 	isLoading = signal(false);
 	selectedOptionId = signal<string | number | null>(null);
-	options: FilterOptions = {
-		sortDirection: 'desc',
-		sortActive: 'date',
-		limit: 10,
-		page: 1,
-		property: null,
-		filters: {},
-	};
+	filters: { [key: string]: any } = {};
 	dataType: {
 		[key: string]: {
 			type: DataType;
@@ -62,7 +44,7 @@ export class TableModel {
 		this.dataTotal = 0;
 		this.pageIndex = TablePageIndexDefaultConst;
 		this.pageSize = TablePageSizeDefaultConst;
-		this.sortOrder = 'asc';
+		this.sortDirection = 'asc';
 	}
 
 	public generateDataType() {
@@ -97,8 +79,8 @@ export class TableModel {
 	public resetPage() {
 		this.pageIndex = TablePageIndexDefaultConst;
 		this.pageSize = TablePageSizeDefaultConst;
-		this.sortKey = '';
-		this.sortOrder = 'asc';
+		this.sortActive = '';
+		this.sortDirection = 'asc';
 	}
 
 	public resetDataSource() {

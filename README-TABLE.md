@@ -47,8 +47,8 @@ EXAMPLE_TABLE.columns = [
 		sortable: false,
 	},
 ];
-EXAMPLE_TABLE.sortKey = 'name';
-EXAMPLE_TABLE.sortOrder = 'asc';
+EXAMPLE_TABLE.sortActive = 'name';
+EXAMPLE_TABLE.sortDirection = 'asc';
 EXAMPLE_TABLE.isHttpPagination.set(false);
 ```
 
@@ -116,8 +116,8 @@ export class ExampleComponent {
 	}
 
 	sortChange(event: Sort): void {
-		this.tableConfig.sortKey = event.active;
-		this.tableConfig.sortOrder = event.direction;
+		this.tableConfig.sortActive = event.active;
+		this.tableConfig.sortDirection = event.direction;
 	}
 
 	pageChange(event: any): void {
@@ -174,8 +174,8 @@ Add the component to your template and bind your data:
 | `dataTotal`        | number                                                                                                          | Total number of rows (used for pagination).                                                                      |
 | `pageIndex`        | number                                                                                                          | Current page index (starts from 0).                                                                              |
 | `pageSize`         | number                                                                                                          | Number of items per page.                                                                                        |
-| `sortKey`          | string                                                                                                          | Active sort key (column identifier).                                                                             |
-| `sortOrder`        | 'asc' / 'desc'                                                                                                  | Current sort direction of the table. Use `'asc'` for ascending, `'desc'` for descending, or `''` for no sorting. |
+| `sortActive`       | string                                                                                                          | Active sort key (column identifier).                                                                             |
+| `sortDirection`    | 'asc' / 'desc'                                                                                                  | Current sort direction of the table. Use `'asc'` for ascending, `'desc'` for descending, or `''` for no sorting. |
 | `selection`        | SelectionModel<any>                                                                                             | Angular CDK selection model for checkbox selection handling.                                                     |
 | `tableClass`       | string                                                                                                          | Custom class for the table (used for styling).                                                                   |
 | `isHttpPagination` | Signal<boolean>                                                                                                 | Whether pagination is handled via API.                                                                           |
@@ -183,7 +183,7 @@ Add the component to your template and bind your data:
 | `isSorter`         | Signal<boolean>                                                                                                 | Toggle for enabling/disabling sorting UI.                                                                        |
 | `isLoading`        | Signal<boolean>                                                                                                 | Indicates loading state of the table.                                                                            |
 | `selectedOptionId` | Signal<string / number / null>                                                                                  | Reactive signal that holds the currently selected row's identifier, or `null` if no selection is made.           |
-| `options`          | FilterOptions                                                                                                   | Object used to store filter/sort/pagination settings sent to the server.                                         |
+| `filters`          | FilterOptions                                                                                                   | Object used to store filter settings sent to the server.                                                         |
 | `dataType`         | Record<string, { type: DataType, format?, currency?, locale?, minimumFractionDigits?, maximumFractionDigits? }> | Optional field configuration for formatting cells (e.g., date, currency).                                        |
 
 ---

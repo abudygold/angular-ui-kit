@@ -66,8 +66,8 @@ export class UsersListComponent {
 	}
 
 	sortChange(event: Sort): void {
-		this.serverSide.sortKey = event.active;
-		this.serverSide.sortOrder = event.direction;
+		this.serverSide.sortActive = event.active;
+		this.serverSide.sortDirection = event.direction;
 	}
 
 	pageChange(event: any): void {

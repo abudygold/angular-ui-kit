@@ -14,9 +14,9 @@
 				[class]="config().tableClass"
 				[dataSource]="pagedData"
 				[matSortActive]="
-					config().isSorter() ? config().sortKey || config().columns.at(0)?.key! : ''
+					config().isSorter() ? config().sortActive || config().columns.at(0)?.key! : ''
 				"
-				[matSortDirection]="config().sortOrder"
+				[matSortDirection]="config().sortDirection"
 				(matSortChange)="sortChange.emit($event)"
 			>
 				<tr mat-header-row *matHeaderRowDef="headerRow" class="table-header"></tr>

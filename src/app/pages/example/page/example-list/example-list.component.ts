@@ -36,8 +36,8 @@ export class ExampleListComponent {
 	}
 
 	sortChange(event: Sort): void {
-		this.clientSide.sortKey = event.active;
-		this.clientSide.sortOrder = event.direction;
+		this.clientSide.sortActive = event.active;
+		this.clientSide.sortDirection = event.direction;
 	}
 
 	pageChange(event: any): void {
