@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AngularUiKit } from './angular-ui-kit';
+import { Textbox } from './textbox';
 
-describe('AngularUiKit', () => {
-  let component: AngularUiKit;
-  let fixture: ComponentFixture<AngularUiKit>;
+describe('Textbox', () => {
+  let component: Textbox;
+  let fixture: ComponentFixture<Textbox>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AngularUiKit]
+      imports: [Textbox]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AngularUiKit);
+    fixture = TestBed.createComponent(Textbox);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

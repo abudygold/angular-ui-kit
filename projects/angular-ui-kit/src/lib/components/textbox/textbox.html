@@ -1,0 +1,36 @@
+<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
+	@if (field().config.label) {
+		<mat-label [class]="field().config.labelClass || ''">
+			{{ field().config.label }}
+		</mat-label>
+	}
+
+	<input
+		matInput
+		[formField]="controlValue(field().control)"
+		[type]="field().config.textboxType || 'text'"
+		[placeholder]="field().config.placeholder || ''"
+		[autocomplete]="field().config.textboxType === 'password' ? 'new-password' : 'off'" />
+
+	@if (matPrefixRef) {
+		<ng-container matPrefix [ngTemplateOutlet]="matPrefixRef"> </ng-container>
+	}
+
+	@if (matSuffixRef) {
+		<ng-container matSuffix [ngTemplateOutlet]="matSuffixRef"> </ng-container>
+	}
+
+	@if (matTextPrefixRef) {
+		<ng-container matTextPrefix [ngTemplateOutlet]="matTextPrefixRef"> </ng-container>
+	}
+
+	@if (matTextSuffixRef) {
+		<ng-container matTextSuffix [ngTemplateOutlet]="matTextSuffixRef"> </ng-container>
+	}
+
+	@if (field().config.limit) {
+		<mat-hint align="end">
+			{{ $any(field().control().value()).length }} / {{ field().config.limit }}
+		</mat-hint>
+	}
+</mat-form-field>

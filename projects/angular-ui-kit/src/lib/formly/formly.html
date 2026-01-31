@@ -1,0 +1,78 @@
+@if (formConfig()) {
+	<div [class]="formConfig()?.formClass || ''">
+		@if (isArray()) {
+			<div
+				class="tw:border !tw:border-solid tw:border-gray-400/80 tw:rounded-2xl tw:p-4 tw:mb-4">
+				@for (
+					row of formConfig()?.control().value() || [];
+					track rowIndex;
+					let rowIndex = $index
+				) {
+					<button (click)="removeItem(formConfig().control, rowIndex)">Remove</button>
+
+					@for (fc of formConfig().fields; track fc.key; let fcIndex = $index) {
+						<!-- If the child field is an array, pass the per-row control for that child array -->
+						@if (fc.type === 'array') {
+							<lib-formly
+								[formConfig]="{
+									...fc,
+									control: formConfig().control[rowIndex][fc.key],
+								}"
+								[isArray]="true" />
+
+							<button
+								(click)="
+									addItem({
+										...fc,
+										control: formConfig().control[rowIndex][fc.key],
+									})
+								">
+								Add {{ fc.key }}
+							</button>
+						}
+
+						<!-- Non-array subfields get the per-row control and marked as subfield -->
+						@if (fc.type !== 'array') {
+							<ng-container
+								*ngTemplateOutlet="
+									fieldRenderer;
+									context: {
+										field: {
+											...fc,
+											control: formConfig().control[rowIndex],
+										},
+									}
+								" />
+						}
+					}
+				}
+			</div>
+		} @else {
+			@for (fc of formConfig()?.fields || []; track fc.key; let fcIndex = $index) {
+				<ng-container *ngTemplateOutlet="fieldRenderer; context: { field: fc }" />
+			}
+		}
+	</div>
+}
+
+<ng-template #fieldRenderer let-field="field">
+	<div [class]="field?.fieldClass || ''">
+		@switch (field.type) {
+			@case ('textbox') {
+				<lib-textbox [field]="field" />
+			}
+
+			@case ('array') {
+				<lib-formly [formConfig]="field" [isArray]="true" />
+
+				<button (click)="addItem(field)">Add {{ field.key }}</button>
+			}
+		}
+
+		@if (field.type !== 'array' && field.control().touched() && field.control().invalid()) {
+			@for (error of field.control().errors(); track error) {
+				<mat-error>{{ error.message }}</mat-error>
+			}
+		}
+	</div>
+</ng-template>
