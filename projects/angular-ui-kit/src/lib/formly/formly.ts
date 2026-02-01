@@ -25,4 +25,8 @@ export class Formly {
 	removeItem(control: any, index: number) {
 		control().value.update((oldValue: any[]) => oldValue.filter((_, i: number) => i !== index));
 	}
+
+	checkError(control: any) {
+		console.log(control);
+	}
 }

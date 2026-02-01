@@ -1,13 +1,13 @@
 @if (formConfig()) {
 	<div [class]="formConfig()?.formClass || ''">
 		@if (isArray()) {
-			<div
-				class="tw:border !tw:border-solid tw:border-gray-400/80 tw:rounded-2xl tw:p-4 tw:mb-4">
-				@for (
-					row of formConfig()?.control().value() || [];
-					track rowIndex;
-					let rowIndex = $index
-				) {
+			@for (
+				row of formConfig()?.control().value() || [];
+				track rowIndex;
+				let rowIndex = $index
+			) {
+				<div
+					class="tw:border !tw:border-solid tw:border-gray-400/80 tw:rounded-2xl tw:p-4 tw:mb-4">
 					<button (click)="removeItem(formConfig().control, rowIndex)">Remove</button>
 
 					@for (fc of formConfig().fields; track fc.key; let fcIndex = $index) {
@@ -45,8 +45,8 @@
 								" />
 						}
 					}
-				}
-			</div>
+				</div>
+			}
 		} @else {
 			@for (fc of formConfig()?.fields || []; track fc.key; let fcIndex = $index) {
 				<ng-container *ngTemplateOutlet="fieldRenderer; context: { field: fc }" />
@@ -70,7 +70,8 @@
 		}
 
 		@if (field.type !== 'array' && field.control().touched() && field.control().invalid()) {
-			@for (error of field.control().errors(); track error) {
+			{{ checkError(field.control()) }}
+			@for (error of field.control().errors(); track error.kind) {
 				<mat-error>{{ error.message }}</mat-error>
 			}
 		}

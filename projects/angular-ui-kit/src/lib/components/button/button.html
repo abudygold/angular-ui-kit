@@ -1,0 +1,41 @@
+@switch (config().buttonType) {
+	@case ('link') {
+		<a mat-button [href]="config().href" [target]="config().target" [color]="config().color">
+			{{ config().text }}
+		</a>
+	}
+	@case ('icon') {
+		<button
+			mat-icon-button
+			[color]="config().color"
+			[disabled]="config().disabled() || config().loading()"
+			(click)="handleClick()">
+			@if (config().loading()) {
+				<mat-spinner diameter="20"></mat-spinner>
+			} @else {
+				<mat-icon>{{ config().icon }}</mat-icon>
+			}
+		</button>
+	}
+	@default {
+		<button
+			mat-button
+			[attr.type]="config().buttonType ?? 'button'"
+			[class]="buttonClass"
+			[color]="config().color"
+			[disabled]="config().disabled() || config().loading()"
+			(click)="handleClick()">
+			@if (config().icon) {
+				<mat-icon>
+					{{ config().icon }}
+				</mat-icon>
+			}
+
+			@if (config().loading()) {
+				<mat-spinner diameter="18"></mat-spinner>
+			} @else {
+				<span>{{ config().text }}</span>
+			}
+		</button>
+	}
+}
