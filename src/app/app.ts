@@ -1,26 +1,32 @@
 import { Component, signal } from '@angular/core';
-import { applyEach, form, required, submit } from '@angular/forms/signals';
+import { applyEach, form, required, SchemaPathTree, submit } from '@angular/forms/signals';
 import { RouterOutlet } from '@angular/router';
-import { Formly, FormlyField, FormlyFormConfig } from '@devkitify/angular-ui-kit';
+import {
+	Button,
+	ButtonModel,
+	Formly,
+	FormlyField,
+	FormlyFormConfig,
+} from '@devkitify/angular-ui-kit';
 
 export interface MenuData {
 	umrahName: string;
 	isPublish: boolean;
 	packages: {
-		name: string;
+		packageName: string;
 		quota: number;
 		prices: {
 			priceValue: number;
 		}[];
 	}[];
 	jamaah: {
-		name: string;
+		jammahName: string;
 	}[];
 }
 
 @Component({
 	selector: 'app-root',
-	imports: [RouterOutlet, Formly],
+	imports: [RouterOutlet, Formly, Button],
 	templateUrl: './app.html',
 	styleUrl: './app.css',
 })
@@ -35,15 +41,33 @@ export class App {
 	formData = form(this.formModel, (schemaPath) => {
 		required(schemaPath.umrahName, { message: 'Umrah name is required' });
 		required(schemaPath.isPublish, { message: 'Is Publish is required' });
-		applyEach(schemaPath.packages, (item) => {
-			required(item.name, { message: 'Name is required' });
-			required(item.quota, { message: 'Quota is required' });
-			applyEach(item.prices, (item) => {
-				required(item.priceValue, { message: 'Price value is required' });
-			});
-		});
+		applyEach(
+			schemaPath.packages,
+			(
+				item: SchemaPathTree<{
+					packageName: string;
+					quota: number;
+					prices: {
+						priceValue: number;
+					}[];
+				}>,
+			) => {
+				required(item.packageName, { message: 'Package Name is required' });
+				required(item.quota, { message: 'Quota is required' });
+				applyEach(
+					item.prices,
+					(
+						item: SchemaPathTree<{
+							priceValue: number;
+						}>,
+					) => {
+						required(item.priceValue, { message: 'Price value is required' });
+					},
+				);
+			},
+		);
 		applyEach(schemaPath.jamaah, (item) => {
-			required(item.name, { message: 'Jamaah name is required' });
+			required(item.jammahName, { message: 'Jamaah name is required' });
 		});
 	});
 
@@ -66,18 +90,17 @@ export class App {
 				key: 'packages',
 				type: 'array',
 				fieldClass: 'tw:col-span-2',
-        // itemListClass: 'tw:border !tw:border-solid tw:border-gray-400/80 tw:rounded-2xl tw:p-4 tw:mb-4',
 				control: this.formData.packages,
 				addItem: {
 					defaultObject: {
-						name: '',
+						packageName: '',
 						quota: 0,
 						prices: [],
 					},
 				},
 				fields: [
 					{
-						key: 'name',
+						key: 'packageName',
 						type: 'textbox',
 						isSubField: true,
 						config: { label: 'Package Name', required: true },
@@ -115,12 +138,12 @@ export class App {
 				control: this.formData.jamaah,
 				addItem: {
 					defaultObject: {
-						name: '',
+						jammahName: '',
 					},
 				},
 				fields: [
 					{
-						key: 'name',
+						key: 'jammahName',
 						type: 'textbox',
 						isSubField: true,
 						config: { label: 'Jamaah Name', required: true },
@@ -130,7 +153,23 @@ export class App {
 		] as FormlyField[],
 	};
 
+	submitBtn: ButtonModel = {
+		text: 'Submit',
+		appearance: 'flat',
+		disabled: signal<boolean>(false),
+		loading: signal<boolean>(false),
+		onClick: () => this.onSubmit(),
+		/* onClick: () =>
+			this.onClickedHandler({
+				form: this.formModel(),
+			}), */
+	};
+
 	onSubmit(): void {
-		submit(this.formData, async () => console.log('@@@', this.formModel()));
+		submit(this.formData, async () => {
+			this.submitBtn.loading.set(true);
+			console.log('@@@', this.formModel());
+			setTimeout(() => this.submitBtn.loading.set(false), 300);
+		});
 	}
 }
