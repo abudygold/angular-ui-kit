@@ -4,13 +4,13 @@ import { FieldTree } from '@angular/forms/signals';
 export type FormlyFieldType =
 	| 'textbox'
 	| 'textarea'
-	| 'datepicker'
+	| 'datepicker' // TODO
 	| 'dropdown'
 	| 'radio'
 	| 'checkbox'
 	| 'autocomplete'
-	| 'chip'
-	| 'button-toggle'
+	| 'chip' // TODO
+	| 'slide-toggle'
 	| 'array';
 
 export type TextBoxType = 'text' | 'password' | 'email' | 'number' | 'textarea';
@@ -29,6 +29,29 @@ export interface FormlyBaseConfig {
 	datepicker?: {
 		isRangeDate?: boolean;
 	};
+	textarea?: {
+		rows?: number;
+	};
+	dropdown?: {
+		options: any[];
+		multiple?: boolean;
+		labelKey?: string;
+		valueKey?: string;
+	};
+	slideToggle?: {
+		label?: string;
+		labelPosition?: 'before' | 'after';
+	};
+	checkbox?: {
+		isSelectAll?: boolean;
+		align?: 'before' | 'after';
+		selectAllLabel?: string;
+	};
+	options?: {
+		data: any[];
+		labelKey?: string;
+		valueKey?: string;
+	};
 }
 
 export interface FormlyValidation {
@@ -42,7 +65,6 @@ export interface FormlyField {
 	type: FormlyFieldType;
 	control: FieldTree<any, any>;
 
-	isSubField?: boolean;
 	addItem?: {
 		defaultObject: any;
 	};
@@ -53,6 +75,11 @@ export interface FormlyField {
 	validation?: FormlyValidation;
 
 	fields?: FormlyField[];
+
+	onInput?: (event: any) => void;
+	onBlur?: (event: any) => void;
+	onChange?: (event: any) => void;
+	onSelectionChange?: (event: any) => void;
 }
 
 export interface FormlyFormConfig {

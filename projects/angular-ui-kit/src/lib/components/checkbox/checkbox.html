@@ -1,1 +1,26 @@
-<p>checkbox works!</p>
+<mat-label [class]="field().config.labelClass || ''">
+	{{ field().config.label }}
+</mat-label>
+
+<!-- Select All -->
+@if (field().config.checkbox?.isSelectAll) {
+	<mat-checkbox
+		class="mb-2"
+		[checked]="isAllSelected()"
+		[indeterminate]="isIndeterminate()"
+		[labelPosition]="field().config.checkbox?.align || 'after'"
+		(change)="toggleAll($event.checked)">
+		{{ field().config.checkbox?.selectAllLabel || 'Select All' }}
+	</mat-checkbox>
+}
+
+<div class="flex flex-col gap-2">
+	@for (option of normalizedOptions(); track $index) {
+		<mat-checkbox
+			[checked]="$any(field().control().value()).includes(option.value)"
+			[labelPosition]="field().config.checkbox?.align || 'after'"
+			(change)="toggle(option.value, $event.checked)">
+			{{ option.label }}
+		</mat-checkbox>
+	}
+</div>

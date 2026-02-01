@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -9,6 +9,7 @@ import { ButtonModel } from '../../shared/model';
 	imports: [MatButtonModule, MatIconModule, MatProgressSpinnerModule],
 	templateUrl: './button.html',
 	styleUrl: './button.css',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Button {
 	config = input.required<ButtonModel>();

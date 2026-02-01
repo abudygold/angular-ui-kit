@@ -1,1 +1,19 @@
-<p>dropdown works!</p>
+<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
+	@if (field().config.label) {
+		<mat-label [class]="field().config.labelClass || ''">
+			{{ field().config.label }}
+		</mat-label>
+	}
+
+	<mat-select
+		[formField]="$any(field().control)"
+		[multiple]="field().config.dropdown?.multiple"
+		[placeholder]="field().config.placeholder || ''"
+		(selectionChange)="field().onSelectionChange ? field().onSelectionChange?.($event) : null">
+		@for (option of normalizedOptions(); track $index) {
+			<mat-option [value]="option.value">
+				{{ option.label }}
+			</mat-option>
+		}
+	</mat-select>
+</mat-form-field>

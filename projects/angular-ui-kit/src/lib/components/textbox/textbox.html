@@ -7,10 +7,13 @@
 
 	<input
 		matInput
-		[formField]="controlValue(field().control)"
+		[formField]="$any(field().control)"
 		[type]="field().config.textboxType || 'text'"
 		[placeholder]="field().config.placeholder || ''"
-		[autocomplete]="field().config.textboxType === 'password' ? 'new-password' : 'off'" />
+		[autocomplete]="field().config.textboxType === 'password' ? 'new-password' : 'off'"
+		(blur)="field().onBlur ? field().onBlur?.($event) : null"
+		(input)="field().onInput ? field().onInput?.($event) : null"
+		(change)="field().onChange ? field().onChange?.($event) : null" />
 
 	@if (matPrefixRef) {
 		<ng-container matPrefix [ngTemplateOutlet]="matPrefixRef"> </ng-container>
@@ -26,6 +29,10 @@
 
 	@if (matTextSuffixRef) {
 		<ng-container matTextSuffix [ngTemplateOutlet]="matTextSuffixRef"> </ng-container>
+	}
+
+	@if (field().config.hint) {
+		<mat-hint align="end">{{ field().config.hint }}</mat-hint>
 	}
 
 	@if (field().config.limit) {

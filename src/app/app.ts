@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { applyEach, form, required, SchemaPathTree, submit } from '@angular/forms/signals';
+import { applyEach, form, required, submit } from '@angular/forms/signals';
 import { RouterOutlet } from '@angular/router';
 import {
 	Button,
@@ -12,6 +12,8 @@ import {
 export interface MenuData {
 	umrahName: string;
 	isPublish: boolean;
+	facilities: string;
+	cities: string;
 	packages: {
 		packageName: string;
 		quota: number;
@@ -34,38 +36,22 @@ export class App {
 	formModel = signal<MenuData>({
 		umrahName: '',
 		isPublish: false,
+		facilities: '',
+		cities: '',
 		packages: [],
 		jamaah: [],
 	});
 
 	formData = form(this.formModel, (schemaPath) => {
 		required(schemaPath.umrahName, { message: 'Umrah name is required' });
-		required(schemaPath.isPublish, { message: 'Is Publish is required' });
-		applyEach(
-			schemaPath.packages,
-			(
-				item: SchemaPathTree<{
-					packageName: string;
-					quota: number;
-					prices: {
-						priceValue: number;
-					}[];
-				}>,
-			) => {
-				required(item.packageName, { message: 'Package Name is required' });
-				required(item.quota, { message: 'Quota is required' });
-				applyEach(
-					item.prices,
-					(
-						item: SchemaPathTree<{
-							priceValue: number;
-						}>,
-					) => {
-						required(item.priceValue, { message: 'Price value is required' });
-					},
-				);
-			},
-		);
+		// required(schemaPath.isPublish, { message: 'Is Publish is required' });
+		applyEach(schemaPath.packages, (item) => {
+			required(item.packageName, { message: 'Package Name is required' });
+			required(item.quota, { message: 'Quota is required' });
+			applyEach(item.prices, (item) => {
+				required(item.priceValue, { message: 'Price value is required' });
+			});
+		});
 		applyEach(schemaPath.jamaah, (item) => {
 			required(item.jammahName, { message: 'Jamaah name is required' });
 		});
@@ -76,15 +62,64 @@ export class App {
 		fields: [
 			{
 				key: 'umrahName',
-				type: 'textbox',
+				type: 'dropdown',
 				control: this.formData.umrahName,
-				config: { label: 'Umrah Name', required: true },
+				onSelectionChange: (event: Event) => this.actionHandler(event),
+				config: {
+					label: 'Umrah Name',
+					required: true,
+					options: {
+						labelKey: 'name',
+						data: [
+							{ id: 1, name: 'Umrah' },
+							{ id: 2, name: 'Haji' },
+							{ id: 3, name: 'Flight' },
+						],
+					},
+				},
 			},
 			{
 				key: 'isPublish',
-				type: 'textbox',
+				type: 'slide-toggle',
 				control: this.formData.isPublish,
 				config: { label: 'Is Publish', required: true },
+			},
+			{
+				key: 'facilities',
+				type: 'checkbox',
+				control: this.formData.facilities,
+				config: {
+					label: 'Facilities',
+					checkbox: {
+						isSelectAll: true,
+					},
+					options: {
+						labelKey: 'name',
+						valueKey: 'name',
+						data: [
+							{ id: 1, name: 'Hotel' },
+							{ id: 2, name: 'Flight' },
+							{ id: 3, name: 'Visa' },
+						],
+					},
+				},
+			},
+			{
+				key: 'cities',
+				type: 'autocomplete',
+				control: this.formData.cities,
+				config: {
+					label: 'City',
+					options: {
+						labelKey: 'name',
+						valueKey: 'name',
+						data: [
+							{ id: 1, name: 'Makkah' },
+							{ id: 2, name: 'Madinah' },
+							{ id: 3, name: 'Jeddah' },
+						],
+					},
+				},
 			},
 			{
 				key: 'packages',
@@ -101,14 +136,13 @@ export class App {
 				fields: [
 					{
 						key: 'packageName',
-						type: 'textbox',
-						isSubField: true,
+						type: 'textarea',
 						config: { label: 'Package Name', required: true },
+						onChange: (event: Event) => this.actionHandler(event),
 					},
 					{
 						key: 'quota',
 						type: 'textbox',
-						isSubField: true,
 						config: { label: 'Quota', required: true },
 					},
 					{
@@ -124,7 +158,6 @@ export class App {
 							{
 								key: 'priceValue',
 								type: 'textbox',
-								isSubField: true,
 								config: { label: 'Price Value', required: true },
 							},
 						],
@@ -145,7 +178,6 @@ export class App {
 					{
 						key: 'jammahName',
 						type: 'textbox',
-						isSubField: true,
 						config: { label: 'Jamaah Name', required: true },
 					},
 				] as FormlyField[],
@@ -159,11 +191,16 @@ export class App {
 		disabled: signal<boolean>(false),
 		loading: signal<boolean>(false),
 		onClick: () => this.onSubmit(),
-		/* onClick: () =>
+		// onClick: (event: Event) => this.onSubmit(event, this.formModel()),
+		/* onClick: (event: Event) =>
 			this.onClickedHandler({
-				form: this.formModel(),
+				form: this.formModel(event, this.formModel()),
 			}), */
 	};
+
+	actionHandler(event: any): void {
+		console.log('event', event);
+	}
 
 	onSubmit(): void {
 		submit(this.formData, async () => {

@@ -12,5 +12,5 @@ export class ButtonModel {
 	target?: '_blank' | '_self';
 	disabled: WritableSignal<boolean> = signal(false);
 	loading: WritableSignal<boolean> = signal(false);
-	onClick?: (props?: any) => void;
+	onClick?: () => void;
 }

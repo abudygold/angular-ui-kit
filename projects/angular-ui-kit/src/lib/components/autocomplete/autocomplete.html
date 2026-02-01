@@ -1,1 +1,21 @@
-<p>autocomplete works!</p>
+<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
+	@if (field().config.label) {
+		<mat-label [class]="field().config.labelClass || ''">
+			{{ field().config.label }}
+		</mat-label>
+	}
+
+	<input
+		matInput
+		[value]="inputValue()"
+		(input)="onInput($any($event.target).value)"
+		[matAutocomplete]="auto" />
+
+	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="select($event.option.value)">
+		@for (option of normalizedOptions(); track $index) {
+			<mat-option [value]="option.value">
+				{{ option.label }}
+			</mat-option>
+		}
+	</mat-autocomplete>
+</mat-form-field>

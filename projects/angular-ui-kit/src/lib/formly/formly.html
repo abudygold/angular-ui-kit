@@ -39,7 +39,7 @@
 									context: {
 										field: {
 											...fc,
-											control: formConfig().control[rowIndex],
+											control: formConfig().control[rowIndex][fc.key],
 										},
 									}
 								" />
@@ -62,6 +62,30 @@
 				<lib-textbox [field]="field" />
 			}
 
+			@case ('textarea') {
+				<lib-textarea [field]="field" />
+			}
+
+			@case ('dropdown') {
+				<lib-dropdown [field]="field" />
+			}
+
+			@case ('checkbox') {
+				<lib-checkbox [field]="field" />
+			}
+
+			@case ('radio') {
+				<lib-radio-button [field]="field" />
+			}
+
+			@case ('autocomplete') {
+				<lib-autocomplete [field]="field" />
+			}
+
+			@case ('slide-toggle') {
+				<lib-slide-toggle [field]="field" />
+			}
+
 			@case ('array') {
 				<lib-formly [formConfig]="field" [isArray]="true" />
 
@@ -69,8 +93,7 @@
 			}
 		}
 
-		@if (field.type !== 'array' && field.control().touched() && field.control().invalid()) {
-			{{ checkError(field.control()) }}
+		@if (field.control().touched() && field.control().invalid()) {
 			@for (error of field.control().errors(); track error.kind) {
 				<mat-error>{{ error.message }}</mat-error>
 			}
