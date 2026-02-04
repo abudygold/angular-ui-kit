@@ -3,6 +3,8 @@ import { Component, input } from '@angular/core';
 import { MatError } from '@angular/material/form-field';
 import { Autocomplete } from '../components/autocomplete';
 import { Checkbox } from '../components/checkbox';
+import { Chip } from '../components/chip';
+import { Datepicker } from '../components/datepicker';
 import { Dropdown } from '../components/dropdown';
 import { RadioButton } from '../components/radio-button';
 import { SlideToggle } from '../components/slide-toggle';
@@ -21,7 +23,9 @@ import { FormlyField, FormlyFormConfig } from '../shared/model';
 		Checkbox,
 		RadioButton,
 		Autocomplete,
+		Datepicker,
 		SlideToggle,
+		Chip,
 	],
 	templateUrl: './formly.html',
 	styleUrl: './formly.css',

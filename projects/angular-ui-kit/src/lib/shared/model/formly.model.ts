@@ -1,19 +1,22 @@
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { FieldTree } from '@angular/forms/signals';
+import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 
-export type FormlyFieldType =
+type FormlyFieldType =
 	| 'textbox'
 	| 'textarea'
-	| 'datepicker' // TODO
+	| 'datepicker'
 	| 'dropdown'
 	| 'radio'
 	| 'checkbox'
 	| 'autocomplete'
-	| 'chip' // TODO
+	| 'chip'
 	| 'slide-toggle'
 	| 'array';
 
-export type TextBoxType = 'text' | 'password' | 'email' | 'number' | 'textarea';
+type TextBoxType = 'text' | 'password' | 'email' | 'number' | 'textarea';
+
+type DateFilterFn<D> = (date: D | null) => boolean;
 
 export interface FormlyBaseConfig {
 	label?: string;
@@ -27,7 +30,9 @@ export interface FormlyBaseConfig {
 	appearance?: 'outline' | 'fill';
 	textboxType?: TextBoxType;
 	datepicker?: {
-		isRangeDate?: boolean;
+		minDate?: Date;
+		dateClass?: MatCalendarCellClassFunction<Date>;
+		filterDate?: DateFilterFn<Date | null>;
 	};
 	textarea?: {
 		rows?: number;
@@ -47,10 +52,22 @@ export interface FormlyBaseConfig {
 		align?: 'before' | 'after';
 		selectAllLabel?: string;
 	};
+	chip?: {
+		removable?: boolean;
+		draggable?: boolean;
+		stacked?: boolean;
+
+		/** input chip */
+		allowInput?: boolean;
+		inputPlaceholder?: string;
+		allowAutocomplete?: boolean;
+	};
 	options?: {
 		data: any[];
 		labelKey?: string;
 		valueKey?: string;
+		filterKey?: string;
+		avatarKey?: string;
 	};
 }
 
@@ -79,6 +96,7 @@ export interface FormlyField {
 	onInput?: (event: any) => void;
 	onBlur?: (event: any) => void;
 	onChange?: (event: any) => void;
+	dateChange?: (event: any) => void;
 	onSelectionChange?: (event: any) => void;
 }
 

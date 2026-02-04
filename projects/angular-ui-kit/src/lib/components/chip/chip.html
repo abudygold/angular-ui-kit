@@ -1,1 +1,99 @@
-<p>chip works!</p>
+<mat-chip-listbox
+	cdkDropList
+	cdkDropListOrientation="horizontal"
+	[class.stacked]="field().config.chip?.stacked"
+	[cdkDropListDisabled]="!field().config.chip?.draggable"
+	(cdkDropListDropped)="onDrop($event)">
+	@for (chip of $any(field().control().value() || []); track $index) {
+		<mat-chip
+			cdkDrag
+			class="c_chip"
+			[disabled]="field().config.disabled"
+			[removable]="field().config.chip?.removable"
+			(removed)="onRemove(chip)">
+			@if (field().config.options?.avatarKey) {
+				<img
+					matChipAvatar
+					[src]="
+						field().config.options?.avatarKey
+							? chip[field().config.options?.avatarKey || '']
+							: chip
+					" />
+			}
+
+			{{
+				field().config.options?.labelKey
+					? chip[field().config.options?.labelKey || '']
+					: chip
+			}}
+
+			@if (field().config.chip?.removable) {
+				<button matChipRemove>
+					<mat-icon>cancel</mat-icon>
+				</button>
+			}
+		</mat-chip>
+	}
+</mat-chip-listbox>
+
+@if (field().config.chip?.allowInput) {
+	<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
+		@if (field().config.label) {
+			<mat-label [class]="field().config.labelClass || ''">
+				{{ field().config.label }}
+			</mat-label>
+		}
+
+		<mat-chip-grid #chipGrid />
+
+		<input
+			matInput
+			#chipInput
+			class="tw:ml-3"
+			[placeholder]="field().config.chip?.inputPlaceholder ?? 'Add item'"
+			[matChipInputFor]="chipGrid"
+			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+			(matChipInputTokenEnd)="addFromInput($event); chipInput.value = ''" />
+	</mat-form-field>
+}
+
+@if (field().config.chip?.allowAutocomplete) {
+	<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
+		@if (field().config.label) {
+			<mat-label [class]="field().config.labelClass || ''">
+				{{ field().config.label }}
+			</mat-label>
+		}
+
+		<mat-chip-grid #chipGrid />
+
+		<input
+			matInput
+			#chipInput
+			class="tw:ml-3"
+			[matAutocomplete]="auto"
+			[placeholder]="field().config.chip?.inputPlaceholder ?? 'Add item'"
+			[matChipInputFor]="chipGrid"
+			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+			(matChipInputTokenEnd)="addFromInput($event); chipInput.value = ''" />
+
+		<mat-autocomplete
+			#auto="matAutocomplete"
+			(optionSelected)="addFromAutocomplete($event); chipInput.value = ''">
+			@for (option of filteredOptions(); track option.value) {
+				<mat-option
+					[value]="
+						field().config.options?.valueKey
+							? option[field().config.options?.valueKey || '']
+							: option
+					">
+					{{
+						field().config.options?.labelKey
+							? option[field().config.options?.labelKey || '']
+							: option
+					}}
+				</mat-option>
+			}
+		</mat-autocomplete>
+	</mat-form-field>
+}

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewEncapsulation } from '@angular/core';
 import { applyEach, form, required, submit } from '@angular/forms/signals';
 import { RouterOutlet } from '@angular/router';
 import {
@@ -24,6 +24,8 @@ export interface MenuData {
 	jamaah: {
 		jammahName: string;
 	}[];
+	departure: Date | null;
+	hobbies: string[];
 }
 
 @Component({
@@ -31,6 +33,7 @@ export interface MenuData {
 	imports: [RouterOutlet, Formly, Button],
 	templateUrl: './app.html',
 	styleUrl: './app.css',
+	encapsulation: ViewEncapsulation.None,
 })
 export class App {
 	formModel = signal<MenuData>({
@@ -40,11 +43,12 @@ export class App {
 		cities: '',
 		packages: [],
 		jamaah: [],
+		departure: null,
+		hobbies: ['Sepeda', 'Motoran', 'Membaca'],
 	});
 
 	formData = form(this.formModel, (schemaPath) => {
 		required(schemaPath.umrahName, { message: 'Umrah name is required' });
-		// required(schemaPath.isPublish, { message: 'Is Publish is required' });
 		applyEach(schemaPath.packages, (item) => {
 			required(item.packageName, { message: 'Package Name is required' });
 			required(item.quota, { message: 'Quota is required' });
@@ -60,6 +64,25 @@ export class App {
 	formConfig: FormlyFormConfig = {
 		formClass: 'tw:grid tw:grid-cols-2 tw:gap-4 tw:m-6',
 		fields: [
+			{
+				key: 'hobbies',
+				type: 'chip',
+				fieldClass: 'tw:col-span-2',
+				control: this.formData.hobbies,
+				config: {
+					label: 'Hobbies',
+					options: {
+						data: ['Sepeda', 'Motoran', 'Membaca', 'Tidur Siang', 'Makan'],
+					},
+					chip: {
+						// draggable: true,
+						// allowInput: true,
+						removable: true,
+						allowAutocomplete: true,
+						inputPlaceholder: 'Add Hobby',
+					},
+				},
+			},
 			{
 				key: 'umrahName',
 				type: 'dropdown',
@@ -79,10 +102,39 @@ export class App {
 				},
 			},
 			{
+				key: 'departure',
+				type: 'datepicker',
+				control: this.formData.departure,
+				config: {
+					label: 'Departure',
+					datepicker: {
+						minDate: new Date(),
+						dateClass: (cellDate, view) => {
+							// Only highligh dates inside the month view.
+							if (view === 'month') {
+								const date = cellDate.getDate();
+
+								// Highlight the 1st and 20th day of each month.
+								return date === 1 || date === 20
+									? 'tw:bg-orange-500! tw:rounded-full'
+									: '';
+							}
+
+							return '';
+						},
+						filterDate: (d: Date | null): boolean => {
+							const day = (d || new Date()).getDay();
+							// Prevent Saturday and Sunday from being selected.
+							return day !== 0 && day !== 6 && day !== 4;
+						},
+					},
+				},
+			},
+			{
 				key: 'isPublish',
 				type: 'slide-toggle',
 				control: this.formData.isPublish,
-				config: { label: 'Is Publish', required: true },
+				config: { label: 'Is Publish' },
 			},
 			{
 				key: 'facilities',
@@ -112,7 +164,8 @@ export class App {
 					label: 'City',
 					options: {
 						labelKey: 'name',
-						valueKey: 'name',
+						filterKey: 'label',
+						// valueKey: 'name',
 						data: [
 							{ id: 1, name: 'Makkah' },
 							{ id: 2, name: 'Madinah' },

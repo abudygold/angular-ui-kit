@@ -86,6 +86,14 @@
 				<lib-slide-toggle [field]="field" />
 			}
 
+			@case ('datepicker') {
+				<lib-datepicker [field]="field" />
+			}
+
+			@case ('chip') {
+				<lib-chip [field]="field" />
+			}
+
 			@case ('array') {
 				<lib-formly [formConfig]="field" [isArray]="true" />
 
