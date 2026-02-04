@@ -1,1 +1,2 @@
-export * from './user-agent'
+export * from './option-generator';
+export * from './user-agent';

@@ -1,1 +1,26 @@
-<p>textarea works!</p>
+<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
+	@if (field().config.label) {
+		<mat-label [class]="field().config.labelClass || ''">
+			{{ field().config.label }}
+		</mat-label>
+	}
+
+	<textarea
+		matInput
+		[formField]="$any(field().control)"
+		[rows]="field().config.textarea?.rows"
+		[placeholder]="field().config.placeholder || ''"
+		(blur)="field().onBlur ? field().onBlur?.($event) : null"
+		(input)="field().onInput ? field().onInput?.($event) : null"
+		(change)="field().onChange ? field().onChange?.($event) : null"></textarea>
+
+	@if (field().config.hint) {
+		<mat-hint align="end">{{ field().config.hint }}</mat-hint>
+	}
+
+	@if (field().config.limit) {
+		<mat-hint align="end">
+			{{ $any(field().control().value()).length }} / {{ field().config.limit }}
+		</mat-hint>
+	}
+</mat-form-field>

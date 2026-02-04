@@ -1,1 +1,12 @@
-<p>radio-button works!</p>
+<mat-label [class]="field().config.labelClass || ''">
+	{{ field().config.label }}
+</mat-label>
+
+<mat-radio-group
+	[formField]="$any(field().control)"
+	(change)="field().onChange ? field().onChange?.($event) : null"
+	class="flex flex-col gap-2">
+	<mat-radio-button *ngFor="let option of normalizedOptions()" [value]="option.value">
+		{{ option.label }}
+	</mat-radio-button>
+</mat-radio-group>

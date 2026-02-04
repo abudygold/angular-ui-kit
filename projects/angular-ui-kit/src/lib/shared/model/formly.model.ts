@@ -1,7 +1,8 @@
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { FieldTree } from '@angular/forms/signals';
+import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 
-export type FormlyFieldType =
+type FormlyFieldType =
 	| 'textbox'
 	| 'textarea'
 	| 'datepicker'
@@ -10,10 +11,12 @@ export type FormlyFieldType =
 	| 'checkbox'
 	| 'autocomplete'
 	| 'chip'
-	| 'button-toggle'
+	| 'slide-toggle'
 	| 'array';
 
-export type TextBoxType = 'text' | 'password' | 'email' | 'number' | 'textarea';
+type TextBoxType = 'text' | 'password' | 'email' | 'number' | 'textarea';
+
+type DateFilterFn<D> = (date: D | null) => boolean;
 
 export interface FormlyBaseConfig {
 	label?: string;
@@ -27,7 +30,44 @@ export interface FormlyBaseConfig {
 	appearance?: 'outline' | 'fill';
 	textboxType?: TextBoxType;
 	datepicker?: {
-		isRangeDate?: boolean;
+		minDate?: Date;
+		dateClass?: MatCalendarCellClassFunction<Date>;
+		filterDate?: DateFilterFn<Date | null>;
+	};
+	textarea?: {
+		rows?: number;
+	};
+	dropdown?: {
+		options: any[];
+		multiple?: boolean;
+		labelKey?: string;
+		valueKey?: string;
+	};
+	slideToggle?: {
+		label?: string;
+		labelPosition?: 'before' | 'after';
+	};
+	checkbox?: {
+		isSelectAll?: boolean;
+		align?: 'before' | 'after';
+		selectAllLabel?: string;
+	};
+	chip?: {
+		removable?: boolean;
+		draggable?: boolean;
+		stacked?: boolean;
+
+		/** input chip */
+		allowInput?: boolean;
+		inputPlaceholder?: string;
+		allowAutocomplete?: boolean;
+	};
+	options?: {
+		data: any[];
+		labelKey?: string;
+		valueKey?: string;
+		filterKey?: string;
+		avatarKey?: string;
 	};
 }
 
@@ -42,7 +82,6 @@ export interface FormlyField {
 	type: FormlyFieldType;
 	control: FieldTree<any, any>;
 
-	isSubField?: boolean;
 	addItem?: {
 		defaultObject: any;
 	};
@@ -53,6 +92,12 @@ export interface FormlyField {
 	validation?: FormlyValidation;
 
 	fields?: FormlyField[];
+
+	onInput?: (event: any) => void;
+	onBlur?: (event: any) => void;
+	onChange?: (event: any) => void;
+	dateChange?: (event: any) => void;
+	onSelectionChange?: (event: any) => void;
 }
 
 export interface FormlyFormConfig {

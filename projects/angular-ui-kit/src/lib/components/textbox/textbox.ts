@@ -1,5 +1,11 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, ContentChild, TemplateRef, input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	ContentChild,
+	TemplateRef,
+	input,
+} from '@angular/core';
 import { FormField } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,6 +16,7 @@ import { FormlyField } from '../../shared/model';
 	imports: [NgTemplateOutlet, FormField, MatFormFieldModule, MatInputModule],
 	templateUrl: './textbox.html',
 	styleUrl: './textbox.css',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Textbox {
 	field = input.required<FormlyField>();
@@ -25,10 +32,4 @@ export class Textbox {
 
 	@ContentChild('matTextSuffixRef')
 	public matTextSuffixRef!: TemplateRef<any> | null;
-
-	controlValue(fieldControl: any): any {
-		if (this.field().isSubField) return fieldControl[this.field().key];
-
-		return fieldControl;
-	}
 }
