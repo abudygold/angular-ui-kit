@@ -1,6 +1,0 @@
-/* Global variable declaration */
-:root {
-	--table-border-radius: 8px;
-	--table-text-color: #09090b;
-	--table-border: 2px solid var(--mat-sys-primary);
-}

@@ -9,6 +9,7 @@
 		matInput
 		[matDatepicker]="picker"
 		[formField]="$any(field().control)"
+		[class]="field().config.inputClass || ''"
 		[min]="field().config.datepicker?.minDate || null"
 		[matDatepickerFilter]="field().config.datepicker?.filterDate || null"
 		(dateChange)="field().dateChange ? field().dateChange?.($event) : null" />

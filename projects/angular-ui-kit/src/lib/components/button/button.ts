@@ -17,15 +17,15 @@ export class Button {
 	get buttonClass() {
 		switch (this.config().appearance) {
 			case 'raised':
-				return 'mat-mdc-raised-button';
+				return `mat-mdc-raised-button ${this.config().buttonClass}`;
 			case 'stroked':
-				return 'mat-mdc-outlined-button';
+				return `mat-mdc-outlined-button ${this.config().buttonClass}`;
 			case 'flat':
-				return 'mat-mdc-unelevated-button';
+				return `mat-mdc-unelevated-button ${this.config().buttonClass}`;
 			case 'fab':
-				return 'mat-mdc-fab';
+				return `mat-mdc-fab ${this.config().buttonClass}`;
 			default:
-				return 'mdc-button';
+				return `mdc-button ${this.config().buttonClass}`;
 		}
 	}
 

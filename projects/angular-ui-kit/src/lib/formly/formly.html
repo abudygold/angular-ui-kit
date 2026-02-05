@@ -1,73 +1,33 @@
 @if (formConfig()) {
 	<div [class]="formConfig()?.formClass || ''">
-		@if (isArray()) {
-			@for (
-				row of formConfig()?.control().value() || [];
-				track rowIndex;
-				let rowIndex = $index
-			) {
-				<div
-					class="tw:border !tw:border-solid tw:border-gray-400/80 tw:rounded-2xl tw:p-4 tw:mb-4">
-					<button (click)="removeItem(formConfig().control, rowIndex)">Remove</button>
-
-					@for (fc of formConfig().fields; track fc.key; let fcIndex = $index) {
-						<!-- If the child field is an array, pass the per-row control for that child array -->
-						@if (fc.type === 'array') {
-							<lib-formly
-								[formConfig]="{
-									...fc,
-									control: formConfig().control[rowIndex][fc.key],
-								}"
-								[isArray]="true" />
-
-							<button
-								(click)="
-									addItem({
-										...fc,
-										control: formConfig().control[rowIndex][fc.key],
-									})
-								">
-								Add {{ fc.key }}
-							</button>
-						}
-
-						<!-- Non-array subfields get the per-row control and marked as subfield -->
-						@if (fc.type !== 'array') {
-							<ng-container
-								*ngTemplateOutlet="
-									fieldRenderer;
-									context: {
-										field: {
-											...fc,
-											control: formConfig().control[rowIndex][fc.key],
-										},
-									}
-								" />
-						}
-					}
-				</div>
-			}
-		} @else {
-			@for (fc of formConfig()?.fields || []; track fc.key; let fcIndex = $index) {
-				<ng-container *ngTemplateOutlet="fieldRenderer; context: { field: fc }" />
-			}
+		@for (fc of formConfig()?.fields || []; track fc.key; let fcIndex = $index) {
+			<ng-container
+				*ngTemplateOutlet="fieldRenderer; context: { field: fc, fieldIndex: fcIndex }" />
 		}
 	</div>
 }
 
-<ng-template #fieldRenderer let-field="field">
+<ng-template #fieldRenderer let-field="field" let-fieldIndex="fieldIndex">
 	<div [class]="field?.fieldClass || ''">
 		@switch (field.type) {
 			@case ('textbox') {
-				<lib-textbox [field]="field" />
+				<lib-textbox [field]="field" [class.no-hint]="!field?.config?.hint" />
 			}
 
 			@case ('textarea') {
-				<lib-textarea [field]="field" />
+				<lib-textarea [field]="field" [class.no-hint]="!field?.config?.hint" />
 			}
 
 			@case ('dropdown') {
-				<lib-dropdown [field]="field" />
+				<lib-dropdown [field]="field" [class.no-hint]="!field?.config?.hint" />
+			}
+
+			@case ('autocomplete') {
+				<lib-autocomplete [field]="field" [class.no-hint]="!field?.config?.hint" />
+			}
+
+			@case ('datepicker') {
+				<lib-datepicker [field]="field" [class.no-hint]="!field?.config?.hint" />
 			}
 
 			@case ('checkbox') {
@@ -78,16 +38,8 @@
 				<lib-radio-button [field]="field" />
 			}
 
-			@case ('autocomplete') {
-				<lib-autocomplete [field]="field" />
-			}
-
 			@case ('slide-toggle') {
 				<lib-slide-toggle [field]="field" />
-			}
-
-			@case ('datepicker') {
-				<lib-datepicker [field]="field" />
 			}
 
 			@case ('chip') {
@@ -95,9 +47,61 @@
 			}
 
 			@case ('array') {
-				<lib-formly [formConfig]="field" [isArray]="true" />
+				@for (
+					row of field?.control().value() || [];
+					track rowIndex;
+					let rowIndex = $index
+				) {
+					<mat-accordion [class]="field.panelClass?.accordion || ''">
+						<mat-expansion-panel
+							[expanded]="true"
+							[class]="field.panelClass?.panel || ''">
+							<mat-expansion-panel-header [class]="field.panelClass?.header || ''">
+								<mat-panel-title [class]="field.panelClass?.title || ''">
+									{{
+										field.title
+											? field.title + ' ' + (rowIndex + 1)
+											: 'Item ' + (rowIndex + 1)
+									}}
+								</mat-panel-title>
+							</mat-expansion-panel-header>
 
-				<button (click)="addItem(field)">Add {{ field.key }}</button>
+							<div [class]="field.removeClass?.div || ''">
+								<button
+									matIconButton
+									aria-label="delete icon"
+									[class]="field.removeClass?.btn || ''"
+									(click)="removeItem(field.control, rowIndex)">
+									<mat-icon class="tw:text-red-500!">delete</mat-icon>
+								</button>
+							</div>
+
+							<div [class]="field.panelClass?.content || ''">
+								@for (fc of field?.fields; track fc.key; let fcIndex = $index) {
+									<ng-container
+										*ngTemplateOutlet="
+											fieldRenderer;
+											context: {
+												field: {
+													...fc,
+													control: field.control[rowIndex][fc.key],
+												},
+											}
+										" />
+								}
+							</div>
+						</mat-expansion-panel>
+					</mat-accordion>
+				}
+
+				<div [class]="field.addClass?.div || ''">
+					<button
+						matButton="outlined"
+						[class]="field.addClass?.btn || ''"
+						(click)="addItem(field)">
+						{{ field.addBtnLabel || 'Add Item' }}
+					</button>
+				</div>
 			}
 		}
 

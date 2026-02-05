@@ -1,6 +1,7 @@
 <mat-chip-listbox
 	cdkDropList
 	cdkDropListOrientation="horizontal"
+	class="tw:mb-3"
 	[class.stacked]="field().config.chip?.stacked"
 	[cdkDropListDisabled]="!field().config.chip?.draggable"
 	(cdkDropListDropped)="onDrop($event)">
@@ -49,7 +50,7 @@
 		<input
 			matInput
 			#chipInput
-			class="tw:ml-3"
+			[class]="field().config.inputClass || ''"
 			[placeholder]="field().config.chip?.inputPlaceholder ?? 'Add item'"
 			[matChipInputFor]="chipGrid"
 			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -70,8 +71,8 @@
 		<input
 			matInput
 			#chipInput
-			class="tw:ml-3"
 			[matAutocomplete]="auto"
+			[class]="field().config.inputClass || ''"
 			[placeholder]="field().config.chip?.inputPlaceholder ?? 'Add item'"
 			[matChipInputFor]="chipGrid"
 			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"

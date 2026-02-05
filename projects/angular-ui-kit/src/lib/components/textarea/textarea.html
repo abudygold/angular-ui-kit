@@ -9,17 +9,20 @@
 		matInput
 		[formField]="$any(field().control)"
 		[rows]="field().config.textarea?.rows"
+		[class]="field().config.inputClass || ''"
 		[placeholder]="field().config.placeholder || ''"
 		(blur)="field().onBlur ? field().onBlur?.($event) : null"
 		(input)="field().onInput ? field().onInput?.($event) : null"
 		(change)="field().onChange ? field().onChange?.($event) : null"></textarea>
 
 	@if (field().config.hint) {
-		<mat-hint align="end">{{ field().config.hint }}</mat-hint>
+		<mat-hint align="end" [class]="field().config.hintClass || ''">
+			{{ field().config.hint }}
+		</mat-hint>
 	}
 
 	@if (field().config.limit) {
-		<mat-hint align="end">
+		<mat-hint align="end" [class]="field().config.hintClass || ''">
 			{{ $any(field().control().value()).length }} / {{ field().config.limit }}
 		</mat-hint>
 	}

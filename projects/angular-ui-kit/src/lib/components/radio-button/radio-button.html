@@ -4,9 +4,11 @@
 
 <mat-radio-group
 	[formField]="$any(field().control)"
-	(change)="field().onChange ? field().onChange?.($event) : null"
-	class="flex flex-col gap-2">
-	<mat-radio-button *ngFor="let option of normalizedOptions()" [value]="option.value">
-		{{ option.label }}
-	</mat-radio-button>
+	[class]="field().config.inputClass || ''"
+	(change)="field().onChange ? field().onChange?.($event) : null">
+	@for (option of normalizedOptions(); track $index) {
+		<mat-radio-button [value]="option.value" [class]="field().config.optionClass || ''">
+			{{ option.label }}
+		</mat-radio-button>
+	}
 </mat-radio-group>

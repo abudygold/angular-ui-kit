@@ -1,5 +1,5 @@
 import { Component, signal, ViewEncapsulation } from '@angular/core';
-import { applyEach, form, required, submit } from '@angular/forms/signals';
+import { applyEach, email, form, required, submit } from '@angular/forms/signals';
 import { RouterOutlet } from '@angular/router';
 import {
 	Button,
@@ -9,23 +9,27 @@ import {
 	FormlyFormConfig,
 } from '@devkitify/angular-ui-kit';
 
-export interface MenuData {
-	umrahName: string;
-	isPublish: boolean;
-	facilities: string;
-	cities: string;
-	packages: {
-		packageName: string;
-		quota: number;
-		prices: {
-			priceValue: number;
+export interface IExample {
+	firstName: string;
+	lastName: string;
+	email: string;
+	dob: Date | null;
+	birthPlace: string;
+	age: number;
+	hobbies: string[];
+	child: {
+		firstName: string;
+		lastName: boolean;
+		email: string;
+		dob: Date | null;
+		birthPlace: string;
+		age: number;
+		hobbies: string[];
+		school: {
+			name: string;
+			location: string;
 		}[];
 	}[];
-	jamaah: {
-		jammahName: string;
-	}[];
-	departure: Date | null;
-	hobbies: string[];
 }
 
 @Component({
@@ -36,28 +40,33 @@ export interface MenuData {
 	encapsulation: ViewEncapsulation.None,
 })
 export class App {
-	formModel = signal<MenuData>({
-		umrahName: '',
-		isPublish: false,
-		facilities: '',
-		cities: '',
-		packages: [],
-		jamaah: [],
-		departure: null,
-		hobbies: ['Sepeda', 'Motoran', 'Membaca'],
+	formModel = signal<IExample>({
+		firstName: '',
+		lastName: '',
+		email: '',
+		dob: null,
+		birthPlace: '',
+		age: 0,
+		hobbies: [],
+		child: [],
 	});
 
 	formData = form(this.formModel, (schemaPath) => {
-		required(schemaPath.umrahName, { message: 'Umrah name is required' });
-		applyEach(schemaPath.packages, (item) => {
-			required(item.packageName, { message: 'Package Name is required' });
-			required(item.quota, { message: 'Quota is required' });
-			applyEach(item.prices, (item) => {
-				required(item.priceValue, { message: 'Price value is required' });
+		required(schemaPath.firstName, { message: 'First name is required' });
+		required(schemaPath.email, { message: 'Email is required' });
+		email(schemaPath.email, { message: 'Invalid email format' });
+		required(schemaPath.dob, { message: 'Date of Birth is required' });
+		required(schemaPath.age, { message: 'Age is required' });
+		applyEach(schemaPath.child, (item) => {
+			required(item.firstName, { message: 'First name is required' });
+			required(item.email, { message: 'Email is required' });
+			email(item.email, { message: 'Invalid email format' });
+			required(item.dob, { message: 'Date of Birth is required' });
+			required(item.age, { message: 'Age is required' });
+			applyEach(item.school, (item) => {
+				required(item.name, { message: 'Price value is required' });
+				required(item.location, { message: 'Price value is required' });
 			});
-		});
-		applyEach(schemaPath.jamaah, (item) => {
-			required(item.jammahName, { message: 'Jamaah name is required' });
 		});
 	});
 
@@ -65,49 +74,35 @@ export class App {
 		formClass: 'tw:grid tw:grid-cols-2 tw:gap-4 tw:m-6',
 		fields: [
 			{
-				key: 'hobbies',
-				type: 'chip',
-				fieldClass: 'tw:col-span-2',
-				control: this.formData.hobbies,
-				config: {
-					label: 'Hobbies',
-					options: {
-						data: ['Sepeda', 'Motoran', 'Membaca', 'Tidur Siang', 'Makan'],
-					},
-					chip: {
-						// draggable: true,
-						// allowInput: true,
-						removable: true,
-						allowAutocomplete: true,
-						inputPlaceholder: 'Add Hobby',
-					},
-				},
+				key: 'firstName',
+				type: 'textbox',
+				fieldClass: 'tw:mb-3',
+				control: this.formData.firstName,
+				config: { label: 'First Name', required: true },
 			},
 			{
-				key: 'umrahName',
-				type: 'dropdown',
-				control: this.formData.umrahName,
-				onSelectionChange: (event: Event) => this.actionHandler(event),
-				config: {
-					label: 'Umrah Name',
-					required: true,
-					options: {
-						labelKey: 'name',
-						data: [
-							{ id: 1, name: 'Umrah' },
-							{ id: 2, name: 'Haji' },
-							{ id: 3, name: 'Flight' },
-						],
-					},
-				},
+				key: 'lastName',
+				type: 'textbox',
+				fieldClass: 'tw:mb-3',
+				control: this.formData.lastName,
+				config: { label: 'Last Name' },
 			},
 			{
-				key: 'departure',
+				key: 'email',
+				type: 'textbox',
+				fieldClass: 'tw:mb-3',
+				control: this.formData.email,
+				config: { label: 'E-Mail', required: true },
+			},
+			{
+				key: 'dob',
 				type: 'datepicker',
-				control: this.formData.departure,
+				fieldClass: 'tw:mb-3',
+				control: this.formData.dob,
 				config: {
-					label: 'Departure',
-					datepicker: {
+					label: 'Date of Birth',
+					required: true,
+					/* datepicker: {
 						minDate: new Date(),
 						dateClass: (cellDate, view) => {
 							// Only highligh dates inside the month view.
@@ -127,111 +122,271 @@ export class App {
 							// Prevent Saturday and Sunday from being selected.
 							return day !== 0 && day !== 6 && day !== 4;
 						},
-					},
+					}, */
 				},
 			},
 			{
-				key: 'isPublish',
-				type: 'slide-toggle',
-				control: this.formData.isPublish,
-				config: { label: 'Is Publish' },
-			},
-			{
-				key: 'facilities',
-				type: 'checkbox',
-				control: this.formData.facilities,
+				key: 'birthPlace',
+				type: 'dropdown',
+				control: this.formData.birthPlace,
+				onSelectionChange: (event: Event) => this.actionHandler(event),
 				config: {
-					label: 'Facilities',
-					checkbox: {
-						isSelectAll: true,
-					},
+					label: 'Birth Place',
+					required: true,
 					options: {
 						labelKey: 'name',
-						valueKey: 'name',
 						data: [
-							{ id: 1, name: 'Hotel' },
-							{ id: 2, name: 'Flight' },
-							{ id: 3, name: 'Visa' },
+							{ id: 'new-york', name: 'New York' },
+							{ id: 'london', name: 'London' },
+							{ id: 'tokyo', name: 'Tokyo' },
+							{ id: 'paris', name: 'Paris' },
+							{ id: 'sydney', name: 'Sydney' },
+							{ id: 'berlin', name: 'Berlin' },
+							{ id: 'toronto', name: 'Toronto' },
+							{ id: 'seoul', name: 'Seoul' },
+							{ id: 'rome', name: 'Rome' },
+							{ id: 'dubai', name: 'Dubai' },
+							{ id: 'singapore', name: 'Singapore' },
+							{ id: 'amsterdam', name: 'Amsterdam' },
+							{ id: 'los-angeles', name: 'Los Angeles' },
+							{ id: 'barcelona', name: 'Barcelona' },
+							{ id: 'vienna', name: 'Vienna' },
 						],
 					},
 				},
 			},
 			{
-				key: 'cities',
-				type: 'autocomplete',
-				control: this.formData.cities,
-				config: {
-					label: 'City',
-					options: {
-						labelKey: 'name',
-						filterKey: 'label',
-						// valueKey: 'name',
-						data: [
-							{ id: 1, name: 'Makkah' },
-							{ id: 2, name: 'Madinah' },
-							{ id: 3, name: 'Jeddah' },
-						],
-					},
-				},
+				key: 'age',
+				type: 'textbox',
+				fieldClass: 'tw:mb-3',
+				control: this.formData.age,
+				config: { label: 'Age', required: true, textboxType: 'number' },
 			},
 			{
-				key: 'packages',
-				type: 'array',
+				key: 'hobbies',
+				type: 'chip',
 				fieldClass: 'tw:col-span-2',
-				control: this.formData.packages,
+				control: this.formData.hobbies,
+				config: {
+					label: 'Hobbies',
+					options: {
+						data: [
+							'Reading books',
+							'Playing football',
+							'Cooking delicious meals',
+							'Hiking in the mountains',
+							'Painting landscapes',
+							'Playing musical instruments',
+							'Swimming',
+							'Photography',
+							'Gardening',
+							'Traveling to new places',
+							'Watching movies',
+							'Playing video games',
+							'Writing stories',
+							'Yoga and meditation',
+							'Cycling',
+						],
+					},
+					chip: {
+						draggable: true,
+						removable: true,
+						// allowInput: true,
+						allowAutocomplete: true,
+						inputPlaceholder: 'Add Hobby',
+					},
+				},
+			},
+			{
+				key: 'child',
+				type: 'array',
+				title: 'Childs',
+				control: this.formData.child,
+				addBtnLabel: 'Add Child',
+				fieldClass: 'tw:col-span-2',
+				addClass: {
+					div: 'tw:flex tw:justify-end tw:mt-3',
+				},
+				removeClass: {
+					div: 'tw:flex tw:justify-end tw:my-3',
+				},
+				panelClass: {
+					panel: 'tw:shadow-2xl tw:mb-3!',
+					header: 'tw:bg-[var(--mat-sys-primary)]! tw:rounded-none!',
+					title: 'tw:text-white!',
+					content:
+						'tw:grid tw:grid-cols-2 tw:gap-4 tw:border tw:border-gray-300 tw:solid tw:p-4 tw:rounded-xl',
+				},
 				addItem: {
 					defaultObject: {
-						packageName: '',
-						quota: 0,
-						prices: [],
+						firstName: '',
+						lastName: '',
+						email: '',
+						dob: null,
+						birthPlace: '',
+						age: null,
+						hobbies: [],
+						school: [],
 					},
 				},
 				fields: [
 					{
-						key: 'packageName',
-						type: 'textarea',
-						config: { label: 'Package Name', required: true },
-						onChange: (event: Event) => this.actionHandler(event),
-					},
-					{
-						key: 'quota',
+						key: 'firstName',
 						type: 'textbox',
-						config: { label: 'Quota', required: true },
+						fieldClass: 'tw:mb-3',
+						config: { label: 'First Name', required: true },
 					},
 					{
-						key: 'prices',
+						key: 'lastName',
+						type: 'textbox',
+						fieldClass: 'tw:mb-3',
+						config: { label: 'Last Name' },
+					},
+					{
+						key: 'email',
+						type: 'textbox',
+						fieldClass: 'tw:mb-3',
+						config: { label: 'E-Mail', required: true },
+					},
+					{
+						key: 'dob',
+						type: 'datepicker',
+						fieldClass: 'tw:mb-3',
+						config: {
+							label: 'Date of Birth',
+							required: true,
+						},
+					},
+					{
+						key: 'birthPlace',
+						type: 'dropdown',
+						onSelectionChange: (event: Event) => this.actionHandler(event),
+						config: {
+							label: 'Birth Place',
+							required: true,
+							options: {
+								labelKey: 'name',
+								data: [
+									{ id: 'new-york', name: 'New York' },
+									{ id: 'london', name: 'London' },
+									{ id: 'tokyo', name: 'Tokyo' },
+									{ id: 'paris', name: 'Paris' },
+									{ id: 'sydney', name: 'Sydney' },
+									{ id: 'berlin', name: 'Berlin' },
+									{ id: 'toronto', name: 'Toronto' },
+									{ id: 'seoul', name: 'Seoul' },
+									{ id: 'rome', name: 'Rome' },
+									{ id: 'dubai', name: 'Dubai' },
+									{ id: 'singapore', name: 'Singapore' },
+									{ id: 'amsterdam', name: 'Amsterdam' },
+									{ id: 'los-angeles', name: 'Los Angeles' },
+									{ id: 'barcelona', name: 'Barcelona' },
+									{ id: 'vienna', name: 'Vienna' },
+								],
+							},
+						},
+					},
+					{
+						key: 'age',
+						type: 'textbox',
+						fieldClass: 'tw:mb-3',
+						config: { label: 'Age', required: true, textboxType: 'number' },
+					},
+					{
+						key: 'hobbies',
+						type: 'chip',
+						fieldClass: 'tw:col-span-2',
+						config: {
+							label: 'Hobbies',
+							options: {
+								data: [
+									'Reading books',
+									'Playing football',
+									'Cooking delicious meals',
+									'Hiking in the mountains',
+									'Painting landscapes',
+									'Playing musical instruments',
+									'Swimming',
+									'Photography',
+									'Gardening',
+									'Traveling to new places',
+									'Watching movies',
+									'Playing video games',
+									'Writing stories',
+									'Yoga and meditation',
+									'Cycling',
+								],
+							},
+							chip: {
+								draggable: true,
+								removable: true,
+								allowInput: true,
+								// allowAutocomplete: true,
+								// inputPlaceholder: 'Add Hobby',
+							},
+						},
+					},
+					{
+						key: 'school',
 						type: 'array',
-						fieldClass: 'tw:col-span-12 tw:m-8',
+						title: 'School',
+						addBtnLabel: 'Add School',
+						fieldClass: 'tw:col-span-2',
+						addClass: {
+							div: 'tw:flex tw:justify-end tw:mt-3',
+						},
+						removeClass: {
+							div: 'tw:flex tw:justify-end tw:my-3',
+						},
+						panelClass: {
+							panel: 'tw:shadow-2xl tw:mb-3!',
+							header: 'tw:bg-[var(--mat-sys-primary)]! tw:rounded-none!',
+							title: 'tw:text-white!',
+							content:
+								'tw:grid tw:grid-cols-2 tw:gap-4 tw:border tw:border-gray-300 tw:solid tw:p-4 tw:rounded-xl',
+						},
 						addItem: {
 							defaultObject: {
-								priceValue: 0,
+								name: '',
+								location: '',
 							},
 						},
 						fields: [
 							{
-								key: 'priceValue',
+								key: 'name',
 								type: 'textbox',
-								config: { label: 'Price Value', required: true },
+								config: { label: 'School Name', required: true },
+							},
+							{
+								key: 'location',
+								type: 'dropdown',
+								onSelectionChange: (event: Event) => this.actionHandler(event),
+								config: {
+									label: 'Location',
+									required: true,
+									options: {
+										labelKey: 'name',
+										data: [
+											{ id: 'new-york', name: 'New York' },
+											{ id: 'london', name: 'London' },
+											{ id: 'tokyo', name: 'Tokyo' },
+											{ id: 'paris', name: 'Paris' },
+											{ id: 'sydney', name: 'Sydney' },
+											{ id: 'berlin', name: 'Berlin' },
+											{ id: 'toronto', name: 'Toronto' },
+											{ id: 'seoul', name: 'Seoul' },
+											{ id: 'rome', name: 'Rome' },
+											{ id: 'dubai', name: 'Dubai' },
+											{ id: 'singapore', name: 'Singapore' },
+											{ id: 'amsterdam', name: 'Amsterdam' },
+											{ id: 'los-angeles', name: 'Los Angeles' },
+											{ id: 'barcelona', name: 'Barcelona' },
+											{ id: 'vienna', name: 'Vienna' },
+										],
+									},
+								},
 							},
 						],
-					},
-				] as FormlyField[],
-			},
-			{
-				key: 'jamaah',
-				type: 'array',
-				fieldClass: 'tw:col-span-2',
-				control: this.formData.jamaah,
-				addItem: {
-					defaultObject: {
-						jammahName: '',
-					},
-				},
-				fields: [
-					{
-						key: 'jammahName',
-						type: 'textbox',
-						config: { label: 'Jamaah Name', required: true },
 					},
 				] as FormlyField[],
 			},
@@ -241,7 +396,7 @@ export class App {
 	submitBtn: ButtonModel = {
 		text: 'Submit',
 		appearance: 'flat',
-		disabled: signal<boolean>(false),
+		buttonClass: 'tw:my-8 tw:w-full',
 		loading: signal<boolean>(false),
 		onClick: () => this.onSubmit(),
 		// onClick: (event: Event) => this.onSubmit(event, this.formModel()),
@@ -257,9 +412,9 @@ export class App {
 
 	onSubmit(): void {
 		submit(this.formData, async () => {
-			this.submitBtn.loading.set(true);
+			this.submitBtn.loading?.set(true);
 			console.log('@@@', this.formModel());
-			setTimeout(() => this.submitBtn.loading.set(false), 300);
+			setTimeout(() => this.submitBtn.loading?.set(false), 300);
 		});
 	}
 }
