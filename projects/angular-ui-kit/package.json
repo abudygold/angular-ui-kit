@@ -1,12 +1,12 @@
 {
-  "name": "@devkitify/angular-ui-kit",
-  "version": "2.0.0",
-  "peerDependencies": {
-    "@angular/common": "^21.1.0",
-    "@angular/core": "^21.1.0"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "sideEffects": false
+	"name": "@devkitify/angular-ui-kit",
+	"version": "2.0.0",
+	"peerDependencies": {
+		"@angular/common": "^21.1.0",
+		"@angular/core": "^21.1.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false
 }

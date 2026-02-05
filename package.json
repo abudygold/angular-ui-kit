@@ -7,6 +7,8 @@
 		"build": "ng build",
 		"watch": "ng build --watch --configuration development",
 		"test": "ng test",
+		"format": "prettier \"**/*.{ts,js,json,scss,html,md}\" --write",
+		"format:check": "prettier \"**/*.{ts,js,json,scss,html,md}\" --check",
 		"build:lib": "ng build angular-ui-kit",
 		"build:watch-lib": "ng build angular-ui-kit --watch"
 	},

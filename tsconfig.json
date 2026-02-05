@@ -1,44 +1,42 @@
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "paths": {
-      "angular-ui-kit": [
-        "./dist/angular-ui-kit"
-      ]
-    },
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "preserve"
-  },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  },
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/angular-ui-kit/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/angular-ui-kit/tsconfig.spec.json"
-    }
-  ]
+	"compileOnSave": false,
+	"compilerOptions": {
+		"paths": {
+			"angular-ui-kit": ["./dist/angular-ui-kit"]
+		},
+		"strict": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"experimentalDecorators": true,
+		"importHelpers": true,
+		"target": "ES2022",
+		"module": "preserve"
+	},
+	"angularCompilerOptions": {
+		"enableI18nLegacyMessageIdFormat": false,
+		"strictInjectionParameters": true,
+		"strictInputAccessModifiers": true,
+		"strictTemplates": true
+	},
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.app.json"
+		},
+		{
+			"path": "./tsconfig.spec.json"
+		},
+		{
+			"path": "./projects/angular-ui-kit/tsconfig.lib.json"
+		},
+		{
+			"path": "./projects/angular-ui-kit/tsconfig.spec.json"
+		}
+	]
 }
