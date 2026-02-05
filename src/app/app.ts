@@ -102,27 +102,27 @@ export class App {
 				config: {
 					label: 'Date of Birth',
 					required: true,
-					/* datepicker: {
-						minDate: new Date(),
-						dateClass: (cellDate, view) => {
-							// Only highligh dates inside the month view.
-							if (view === 'month') {
-								const date = cellDate.getDate();
+					// datepicker: {
+					// 	minDate: new Date(),
+					// 	dateClass: (cellDate, view) => {
+					// 		// Only highligh dates inside the month view.
+					// 		if (view === 'month') {
+					// 			const date = cellDate.getDate();
 
-								// Highlight the 1st and 20th day of each month.
-								return date === 1 || date === 20
-									? 'tw:bg-orange-500! tw:rounded-full'
-									: '';
-							}
+					// 			// Highlight the 1st and 20th day of each month.
+					// 			return date === 1 || date === 20
+					// 				? 'tw:bg-orange-500! tw:rounded-full'
+					// 				: '';
+					// 		}
 
-							return '';
-						},
-						filterDate: (d: Date | null): boolean => {
-							const day = (d || new Date()).getDay();
-							// Prevent Saturday and Sunday from being selected.
-							return day !== 0 && day !== 6 && day !== 4;
-						},
-					}, */
+					// 		return '';
+					// 	},
+					// 	filterDate: (d: Date | null): boolean => {
+					// 		const day = (d || new Date()).getDay();
+					// 		// Prevent Saturday and Sunday from being selected.
+					// 		return day !== 0 && day !== 6 && day !== 4;
+					// 	},
+					// },
 				},
 			},
 			{
@@ -400,10 +400,10 @@ export class App {
 		loading: signal<boolean>(false),
 		onClick: () => this.onSubmit(),
 		// onClick: (event: Event) => this.onSubmit(event, this.formModel()),
-		/* onClick: (event: Event) =>
-			this.onClickedHandler({
-				form: this.formModel(event, this.formModel()),
-			}), */
+		// onClick: (event: Event) =>
+		// 	this.onClickedHandler({
+		// 		form: this.formModel(event, this.formModel()),
+		// 	}),
 	};
 
 	actionHandler(event: any): void {

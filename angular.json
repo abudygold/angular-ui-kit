@@ -27,7 +27,7 @@
 						"styles": [
 							"src/styles/material-theme.scss",
 							"src/styles/styles.css",
-							"dist/angular-ui-kit/src/styles/styles.scss"
+							"node_modules/@devkitify/angular-ui-kit/src/styles/styles.scss"
 						]
 					},
 					"configurations": {

@@ -9,6 +9,59 @@ Welcome to the Angular UI Kit! This project provides reusable Angular components
 - Customizable themes
 - Easy to use and extend
 
+## Package Configuration
+
+This project uses **two different `package.json` files** depending on the environment:
+
+### Package Files
+
+| File Name             | Purpose                                                          |
+| --------------------- | ---------------------------------------------------------------- |
+| `_package-local.json` | Used for **local development** (workspace / library development) |
+| `_package-npmjs.json` | Used for **publishing to npmjs**                                 |
+
+### How to Use
+
+#### Local Development
+
+Replace `package.json` with the local version:
+
+```bash
+cp _package-local.json package.json
+```
+
+## Styles Configuration
+
+This library provides **two style sources** depending on how it is used:
+**local development** and **npm-installed package**.
+
+You must register the correct style path in your Angular application’s
+`angular.json`.
+
+---
+
+### Option 1: Local Development (Library Build Output)
+
+Use this configuration when working with the library **locally** (development or testing from build output):
+
+```json
+"styles": [
+  "dist/angular-ui-kit/src/styles/styles.scss"
+]
+```
+
+### Option 2: Using NPM Package
+
+Use this option when the library is installed from **npmjs**.
+
+Add the following path to the `styles` array in your `angular.json` file:
+
+```json
+"styles": [
+  "node_modules/@devkitify/angular-ui-kit/src/styles/styles.scss"
+]
+```
+
 ## Getting Started
 
 To use this library in your Angular project, install it via npm:
