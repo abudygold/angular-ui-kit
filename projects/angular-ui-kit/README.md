@@ -2,6 +2,13 @@
 
 Welcome to the Angular UI Kit! This project provides reusable Angular components to accelerate your development workflow.
 
+## Version Compatibility
+
+| Angular Version | Package Version  |
+| --------------- | ---------------- |
+| Angular 19      | v1.0.x           |
+| Angular 21      | v2.0.x and above |
+
 ## Features
 
 - Prebuilt UI components (Table, Breadcrumbs, Buttons, etc.)
