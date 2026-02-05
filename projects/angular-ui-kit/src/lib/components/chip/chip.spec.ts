@@ -3,21 +3,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Chip } from './chip';
 
 describe('Chip', () => {
-  let component: Chip;
-  let fixture: ComponentFixture<Chip>;
+	let component: Chip;
+	let fixture: ComponentFixture<Chip>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Chip]
-    })
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [Chip],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(Chip);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+		fixture = TestBed.createComponent(Chip);
+		component = fixture.componentInstance;
+		await fixture.whenStable();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

@@ -17,9 +17,7 @@
 		"useTabs": true,
 		"tabWidth": 4,
 		"htmlWhitespaceSensitivity": "strict",
-		"plugins": [
-			"prettier-plugin-organize-imports"
-		],
+		"plugins": ["prettier-plugin-organize-imports"],
 		"overrides": [
 			{
 				"files": "*.html",

@@ -1,4 +1,4 @@
-import { WritableSignal, signal } from '@angular/core';
+import { WritableSignal } from '@angular/core';
 
 export type ButtonType = 'submit' | 'reset' | 'button' | 'link' | 'icon';
 
