@@ -1,59 +1,58 @@
-# AngularUi
+# Angular UI Kit
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+Welcome to the Angular UI Kit! This project provides reusable Angular components to accelerate your development workflow.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Prebuilt UI components (Table, Breadcrumbs, Buttons, etc.)
+- Angular Material integration
+- Customizable themes
+- Easy to use and extend
 
-```bash
-ng serve
-```
+## Getting Started
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+To use this library in your Angular project, install it via npm:
 
 ```bash
-ng generate component component-name
+npm install @devkitify/angular-ui-kit
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Then, import the desired modules into your application:
 
-```bash
-ng generate --help
+```typescript
+import { TableComponent, TableModel } from '@devkitify/angular-ui-kit';
 ```
 
-## Building
+## Folder Structure
 
-To build the project run:
+- Components
+    - [Autocomplete](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Breadcrumbs](https://github.com/abudygold/angular-ui-kit/blob/main/README-BREADCRUMB.md)
+    - [Button](https://github.com/abudygold/angular-ui-kit/blob/main/README-BUTTON.md)
+    - [Slide Toggle](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Checkbox](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Chip](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Datepicker](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Dropdown](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Formly](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Modal](https://github.com/abudygold/angular-ui-kit/blob/main/README-MODAL.md)
+    - [Radio Button](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Table](https://github.com/abudygold/angular-ui-kit/blob/main/README-TABLE.md)
+    - [Textarea](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+    - [Textbox](https://github.com/abudygold/angular-ui-kit/blob/main/README-FORM.md)
+- Services
+    - [API](https://github.com/abudygold/angular-ui-kit/blob/main/README-API.md)
+- Shared
+    - Model
+    - Pipes
+        - [Currency](https://github.com/abudygold/angular-ui-kit/blob/main/README-CURRENCY.md)
+    - Utils
 
-```bash
-ng build
-```
+## Resources
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- [Angular CLI Documentation](https://angular.dev/tools/cli)
+- [Angular Official Documentation](https://angular.dev/)
 
-## Running unit tests
+---
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Feel free to contribute or open issues to help improve this library!

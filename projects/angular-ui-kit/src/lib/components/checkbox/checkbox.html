@@ -5,21 +5,25 @@
 <!-- Select All -->
 @if (field().config.checkbox?.isSelectAll) {
 	<mat-checkbox
-		class="mb-2"
 		[checked]="isAllSelected()"
 		[indeterminate]="isIndeterminate()"
+		[class]="field().config.selectAllClass || ''"
 		[labelPosition]="field().config.checkbox?.align || 'after'"
-		(change)="toggleAll($event.checked)">
+		(change)="toggleAll($event.checked); field().onChange ? field().onChange?.($event) : null">
 		{{ field().config.checkbox?.selectAllLabel || 'Select All' }}
 	</mat-checkbox>
 }
 
-<div class="flex flex-col gap-2">
+<div [class]="field().config.inputClass || ''">
 	@for (option of normalizedOptions(); track $index) {
 		<mat-checkbox
+			[class]="field().config.optionClass || ''"
 			[checked]="$any(field().control().value()).includes(option.value)"
 			[labelPosition]="field().config.checkbox?.align || 'after'"
-			(change)="toggle(option.value, $event.checked)">
+			(change)="
+				toggle(option.value, $event.checked);
+				field().onChange ? field().onChange?.($event) : null
+			">
 			{{ option.label }}
 		</mat-checkbox>
 	}

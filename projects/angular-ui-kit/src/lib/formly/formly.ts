@@ -1,6 +1,9 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatError } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { Autocomplete } from '../components/autocomplete';
 import { Checkbox } from '../components/checkbox';
 import { Chip } from '../components/chip';
@@ -16,6 +19,9 @@ import { FormlyField, FormlyFormConfig } from '../shared/model';
 	selector: 'lib-formly',
 	imports: [
 		NgTemplateOutlet,
+		MatExpansionModule,
+		MatButtonModule,
+		MatIconModule,
 		MatError,
 		Textbox,
 		Textarea,

@@ -8,9 +8,9 @@
 		<button
 			mat-icon-button
 			[color]="config().color"
-			[disabled]="config().disabled() || config().loading()"
+			[disabled]="config().disabled?.() || config().loading?.()"
 			(click)="handleClick()">
-			@if (config().loading()) {
+			@if (config().loading?.()) {
 				<mat-spinner diameter="20"></mat-spinner>
 			} @else {
 				<mat-icon>{{ config().icon }}</mat-icon>
@@ -23,7 +23,7 @@
 			[attr.type]="config().buttonType ?? 'button'"
 			[class]="buttonClass"
 			[color]="config().color"
-			[disabled]="config().disabled() || config().loading()"
+			[disabled]="config().disabled?.() || config().loading?.()"
 			(click)="handleClick()">
 			@if (config().icon) {
 				<mat-icon>
@@ -31,7 +31,7 @@
 				</mat-icon>
 			}
 
-			@if (config().loading()) {
+			@if (config().loading?.()) {
 				<mat-spinner diameter="18"></mat-spinner>
 			} @else {
 				<span>{{ config().text }}</span>

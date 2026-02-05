@@ -1,13 +1,13 @@
 import { Component, computed, input } from '@angular/core';
 import { FormField } from '@angular/forms/signals';
-import { MatRadioButton } from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatLabel } from '@angular/material/select';
 import { FormlyField } from '../../shared/model';
 import { optionGenerator } from '../../shared/utils';
-import { MatLabel } from '@angular/material/select';
 
 @Component({
 	selector: 'lib-radio-button',
-	imports: [FormField, MatRadioButton, MatLabel],
+	imports: [FormField, MatRadioModule, MatLabel],
 	templateUrl: './radio-button.html',
 	styleUrl: './radio-button.css',
 })

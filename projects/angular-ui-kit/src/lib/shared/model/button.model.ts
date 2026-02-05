@@ -10,7 +10,8 @@ export class ButtonModel {
 	icon?: string;
 	href?: string;
 	target?: '_blank' | '_self';
-	disabled: WritableSignal<boolean> = signal(false);
-	loading: WritableSignal<boolean> = signal(false);
+	buttonClass?: string;
+	disabled?: WritableSignal<boolean>;
+	loading?: WritableSignal<boolean>;
 	onClick?: () => void;
 }

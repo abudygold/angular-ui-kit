@@ -24,7 +24,11 @@
 								"input": "public"
 							}
 						],
-						"styles": ["src/styles/material-theme.scss", "src/styles/styles.css"]
+						"styles": [
+							"src/styles/material-theme.scss",
+							"src/styles/styles.css",
+							"dist/angular-ui-kit/src/styles/styles.scss"
+						]
 					},
 					"configurations": {
 						"production": {

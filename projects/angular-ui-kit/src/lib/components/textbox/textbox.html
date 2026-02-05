@@ -8,6 +8,7 @@
 	<input
 		matInput
 		[formField]="$any(field().control)"
+		[class]="field().config.inputClass || ''"
 		[type]="field().config.textboxType || 'text'"
 		[placeholder]="field().config.placeholder || ''"
 		[autocomplete]="field().config.textboxType === 'password' ? 'new-password' : 'off'"
@@ -32,11 +33,13 @@
 	}
 
 	@if (field().config.hint) {
-		<mat-hint align="end">{{ field().config.hint }}</mat-hint>
+		<mat-hint align="end" [class]="field().config.hintClass || ''">
+			{{ field().config.hint }}
+		</mat-hint>
 	}
 
 	@if (field().config.limit) {
-		<mat-hint align="end">
+		<mat-hint align="end" [class]="field().config.hintClass || ''">
 			{{ $any(field().control().value()).length }} / {{ field().config.limit }}
 		</mat-hint>
 	}

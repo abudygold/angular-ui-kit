@@ -8,6 +8,7 @@
 	<input
 		matInput
 		[value]="inputValue()"
+		[class]="field().config.inputClass || ''"
 		(input)="onInput($any($event.target).value)"
 		[matAutocomplete]="auto" />
 
