@@ -111,4 +111,22 @@ export class TableModel {
 
 		this.selection.select(...this.dataSource);
 	}
+
+	hasNext(hasNext: boolean): void {
+		if (!hasNext && this.pageIndex <= 1) {
+			this.dataTotal = this.dataSource?.length ?? 0;
+			return;
+		}
+
+		this.dataTotal =
+			this.pageIndex === 1 ? this.pageSize * 2 : this.pageSize * (this.pageIndex + 1);
+
+		const diffData = this.pageSize - this.dataSource?.length;
+
+		/* totalData substracted by diffData if data < pageSize  */
+		if (diffData !== 0) this.dataTotal -= diffData;
+
+		/* totalData substracted by pageSize if isNext false */
+		if (!hasNext) this.dataTotal -= this.pageSize;
+	}
 }
