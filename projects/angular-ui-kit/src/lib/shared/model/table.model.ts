@@ -52,6 +52,7 @@ export class TableModel {
 
 		for (const key in this.dataSource[0]) {
 			const keyValue = this.dataSource[0][key];
+			const isUppercase = keyValue === keyValue?.toUpperCase() && /[A-Z]/.test(keyValue);
 
 			if (!this.columns.some((t) => t.key === key)) continue;
 
@@ -60,7 +61,7 @@ export class TableModel {
 				dataType = 'date';
 			} else if (typeof keyValue === 'number') {
 				dataType = 'number';
-			} else if (typeof keyValue === 'string') {
+			} else if (typeof keyValue === 'string' && !isUppercase) {
 				dataType = 'title';
 			} else {
 				dataType = '';
@@ -110,5 +111,23 @@ export class TableModel {
 		}
 
 		this.selection.select(...this.dataSource);
+	}
+
+	hasNext(hasNext: boolean): void {
+		if (!hasNext && this.pageIndex <= 1) {
+			this.dataTotal = this.dataSource?.length ?? 0;
+			return;
+		}
+
+		this.dataTotal =
+			this.pageIndex === 1 ? this.pageSize * 2 : this.pageSize * (this.pageIndex + 1);
+
+		const diffData = this.pageSize - this.dataSource?.length;
+
+		/* totalData substracted by diffData if data < pageSize  */
+		if (diffData !== 0) this.dataTotal -= diffData;
+
+		/* totalData substracted by pageSize if isNext false */
+		if (!hasNext) this.dataTotal -= this.pageSize;
 	}
 }
