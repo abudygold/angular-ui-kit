@@ -52,6 +52,7 @@ export class TableModel {
 
 		for (const key in this.dataSource[0]) {
 			const keyValue = this.dataSource[0][key];
+			const isUppercase = keyValue === keyValue.toUpperCase() && /[A-Z]/.test(keyValue);
 
 			if (!this.columns.some((t) => t.key === key)) continue;
 
@@ -60,7 +61,7 @@ export class TableModel {
 				dataType = 'date';
 			} else if (typeof keyValue === 'number') {
 				dataType = 'number';
-			} else if (typeof keyValue === 'string') {
+			} else if (typeof keyValue === 'string' && !isUppercase) {
 				dataType = 'title';
 			} else {
 				dataType = '';
