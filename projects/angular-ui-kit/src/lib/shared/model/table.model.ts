@@ -52,7 +52,7 @@ export class TableModel {
 
 		for (const key in this.dataSource[0]) {
 			const keyValue = this.dataSource[0][key];
-			const isUppercase = keyValue === keyValue.toUpperCase() && /[A-Z]/.test(keyValue);
+			const isUppercase = keyValue === keyValue?.toUpperCase() && /[A-Z]/.test(keyValue);
 
 			if (!this.columns.some((t) => t.key === key)) continue;
 

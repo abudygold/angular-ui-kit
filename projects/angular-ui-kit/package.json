@@ -1,6 +1,29 @@
 {
 	"name": "@devkitify/angular-ui-kit",
 	"version": "2.0.3",
+	"description": "An Angular UI Kit library with reusable components and directives built on Angular Material.",
+	"author": "Abdullah Umar Babsel",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/abudygold/angular-ui-kit.git"
+	},
+	"bugs": {
+		"url": "https://github.com/abudygold/angular-ui-kit/issues"
+	},
+	"homepage": "https://github.com/abudygold/angular-ui-kit",
+	"keywords": [
+		"angular",
+		"angular-material",
+		"ui-kit",
+		"design-system",
+		"angular-library",
+		"angular-components",
+		"angular-design-system",
+		"angular-ui-components",
+		"angular-ui-library",
+		"angular-ui-design-system"
+	],
+	"license": "MIT",
 	"peerDependencies": {
 		"@angular/common": "^21.1.0",
 		"@angular/core": "^21.1.0"
