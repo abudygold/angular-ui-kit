@@ -140,6 +140,7 @@
 }
 
 .border-empty {
+	text-align: center;
 	border-top: 1px solid rgba(143, 134, 147, 0.3);
 	border-bottom: 1px solid rgba(143, 134, 147, 0.3);
 }
