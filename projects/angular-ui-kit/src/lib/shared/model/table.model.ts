@@ -57,7 +57,7 @@ export class TableModel {
 			if (!this.columns.some((t) => t.key === key)) continue;
 
 			let dataType: DataType = '';
-			if (keyValue instanceof Date) {
+			if (this.isValidDateString(keyValue)) {
 				dataType = 'date';
 			} else if (typeof keyValue === 'number') {
 				dataType = 'number';
@@ -73,18 +73,25 @@ export class TableModel {
 		return this;
 	}
 
-	public isEmpty(): boolean {
+	isValidDateString(value: unknown): boolean {
+		if (typeof value !== 'string') return false;
+
+		const d = new Date(value);
+		return !isNaN(d.getTime());
+	}
+
+	isEmpty(): boolean {
 		return this.dataSource?.length === 0;
 	}
 
-	public resetPage() {
+	resetPage() {
 		this.pageIndex = TablePageIndexDefaultConst;
 		this.pageSize = TablePageSizeDefaultConst;
 		this.sortActive = '';
 		this.sortDirection = 'asc';
 	}
 
-	public resetDataSource() {
+	resetDataSource() {
 		this.resetPage();
 
 		this.dataSource = [];

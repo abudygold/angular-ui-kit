@@ -1,6 +1,6 @@
 {
 	"name": "@devkitify/angular-ui-kit",
-	"version": "2.0.3",
+	"version": "2.0.4",
 	"description": "An Angular UI Kit library with reusable components and directives built on Angular Material.",
 	"author": "Abdullah Umar Babsel",
 	"repository": {

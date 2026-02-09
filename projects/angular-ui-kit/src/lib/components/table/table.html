@@ -54,7 +54,9 @@
 									@case ('date') {
 										{{
 											getPropertyValue(data, column.key)
-												| date: config().dataType[column.key].format
+												| date
+													: config().dataType[column.key].format ||
+															'mediumDate'
 										}}
 									}
 									@case ('number') {
