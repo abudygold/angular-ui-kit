@@ -11,8 +11,12 @@
 		gap: 16px;
 	}
 
-	mat-select {
+	mat-select.pagination__select {
 		width: 40px;
+	}
+
+	mat-select.pagination__select > .cdk-overlay-popover > .cdk-overlay-pane {
+		width: auto !important;
 	}
 
 	.label {

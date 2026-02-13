@@ -2,5 +2,11 @@
 	<lib-formly [formConfig]="formConfig" />
 	<lib-button [config]="submitBtn" />
 
+	<lib-table
+		[config]="tableModel"
+		(sortChange)="sortChange($event)"
+		(pageChange)="pageChange($event)">
+	</lib-table>
+
 	<router-outlet />
 </div>

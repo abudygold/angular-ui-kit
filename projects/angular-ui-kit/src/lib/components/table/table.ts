@@ -80,30 +80,27 @@ export class Table {
 		return this.config().columns.map((c) => c.key);
 	}
 
-	get pagedData(): MatTableDataSource<any> {
+	fetchBootstrapData(): MatTableDataSource<any> {
 		const { dataSource, pageIndex, pageSize } = this.config();
+		const start = pageIndex * pageSize;
+		const end = start + pageSize;
 
-		if (Array.isArray(dataSource)) {
-			const start = pageIndex * pageSize;
-			const end = start + pageSize;
-
-			this.dataSource = new MatTableDataSource<any>(dataSource.slice(start, end));
-			this.dataSource.sort = this.sort;
-		}
-
+		this.dataSource = new MatTableDataSource<any>(dataSource.slice(start, end));
+		this.dataSource.sort = this.sort;
 		return this.dataSource;
 	}
 
 	onPageChange(page: IPagination): void {
 		if (!page) return;
 
-		if (this.config().isHttpPagination()) {
+		if (this.config().isServerSide()) {
+			this.config().isLoading.set(true);
 			this.pageChange.emit(page);
 			return;
 		}
 
 		this.config().pageIndex = page.pageIndex;
 		this.config().pageSize = page.pageSize;
-		this.pagedData;
+		this.fetchBootstrapData();
 	}
 }

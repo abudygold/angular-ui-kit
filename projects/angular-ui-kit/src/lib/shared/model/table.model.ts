@@ -21,7 +21,7 @@ export class TableModel {
 	public selection: SelectionModel<any> = new SelectionModel<any>(true, []);
 	public tableClass: string = '';
 
-	isHttpPagination = signal(true);
+	isServerSide = signal(true);
 	isPagination = signal(true);
 	isSorter = signal(true);
 	isLoading = signal(false);

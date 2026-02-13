@@ -12,7 +12,7 @@
 		[class]="field().config.inputClass || ''"
 		[min]="field().config.datepicker?.minDate || null"
 		[matDatepickerFilter]="field().config.datepicker?.filterDate || null"
-		(dateChange)="field().dateChange ? field().dateChange?.($event) : null" />
+		(dateChange)="field().onChange ? field().onChange?.($event) : null" />
 
 	<mat-datepicker-toggle matIconSuffix [for]="picker" />
 	<mat-datepicker #picker [dateClass]="$any(field().config.datepicker?.dateClass || null)" />

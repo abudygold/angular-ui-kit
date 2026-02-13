@@ -10,7 +10,7 @@
 		[class]="field().config.inputClass || ''"
 		[multiple]="field().config.dropdown?.multiple"
 		[placeholder]="field().config.placeholder || ''"
-		(selectionChange)="field().onSelectionChange ? field().onSelectionChange?.($event) : null">
+		(selectionChange)="field().onChange ? field().onChange?.($event) : null">
 		@for (option of normalizedOptions(); track $index) {
 			<mat-option [value]="option.value" [class]="field().config.optionClass || ''">
 				{{ option.label }}
