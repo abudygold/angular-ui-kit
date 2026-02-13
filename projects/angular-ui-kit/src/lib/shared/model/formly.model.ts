@@ -125,8 +125,6 @@ export interface FormlyField {
 	onInput?: (event: any) => void;
 	onBlur?: (event: any) => void;
 	onChange?: (event: any) => void;
-	dateChange?: (event: any) => void;
-	onSelectionChange?: (event: any) => void;
 }
 
 export interface FormlyFormConfig {

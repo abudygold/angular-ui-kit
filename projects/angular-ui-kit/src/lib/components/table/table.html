@@ -11,7 +11,7 @@
 				mat-table
 				class="table"
 				[class]="config().tableClass"
-				[dataSource]="pagedData"
+				[dataSource]="config().isServerSide() ? config().dataSource : fetchBootstrapData()"
 				[matSortActive]="
 					config().isSorter() ? config().sortActive || config().columns.at(0)?.key! : ''
 				"

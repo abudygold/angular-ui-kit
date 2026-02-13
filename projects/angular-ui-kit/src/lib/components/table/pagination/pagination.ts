@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit, input, model, output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	OnInit,
+	ViewEncapsulation,
+	input,
+	model,
+	output,
+} from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -9,6 +17,7 @@ import { isMobile } from '../../../shared/utils';
 	imports: [MatSelectModule, MatIconModule, MatDividerModule],
 	templateUrl: './pagination.html',
 	styleUrl: './pagination.css',
+	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Pagination implements OnInit {

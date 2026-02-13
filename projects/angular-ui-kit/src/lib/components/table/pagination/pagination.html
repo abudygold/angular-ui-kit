@@ -1,7 +1,7 @@
 <div class="custom-paginator">
 	<div class="left">
 		<span class="label">Items per page:</span>
-		<mat-select [(value)]="pageSize" (selectionChange)="onChangePageSize()">
+		<mat-select class="pagination__select" [(value)]="pageSize" (selectionChange)="onChangePageSize()">
 			@for (item of pageSizeOptions; track $index) {
 				<mat-option [value]="item">{{ item }}</mat-option>
 			}
@@ -18,7 +18,7 @@
 		<mat-divider [vertical]="true" class="divider" />
 
 		@if (!isMobile) {
-			<mat-select [(value)]="pageIndex" (selectionChange)="onPageChange()">
+			<mat-select class="pagination__select" [(value)]="pageIndex" (selectionChange)="onPageChange()">
 				@for (item of totalPagesArray; track $index) {
 					<mat-option [value]="item">{{ item + 1 }}</mat-option>
 				}
