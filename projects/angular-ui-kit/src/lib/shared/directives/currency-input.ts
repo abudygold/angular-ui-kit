@@ -1,5 +1,5 @@
 import { Directive, ElementRef, HostListener, inject, input, OnInit } from '@angular/core';
-import { CurrencyIntlPipe } from '@devkitify/angular-ui-kit';
+import { CurrencyIntlPipe } from '../pipes';
 
 @Directive({
 	selector: '[currencyIntlInput]',
