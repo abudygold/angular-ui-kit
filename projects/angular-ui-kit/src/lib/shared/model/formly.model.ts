@@ -33,6 +33,10 @@ export interface FormlyBaseConfig {
 	readonly?: boolean;
 	appearance?: 'outline' | 'fill';
 	textboxType?: TextBoxType;
+	texboxCurrency?: {
+		currency?: string;
+		locale?: string;
+	};
 	datepicker?: {
 		minDate?: Date;
 		dateClass?: MatCalendarCellClassFunction<Date>;

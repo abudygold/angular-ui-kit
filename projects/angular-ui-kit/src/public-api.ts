@@ -16,9 +16,13 @@ export * from './lib/components/slide-toggle';
 export * from './lib/components/table';
 export * from './lib/components/textarea';
 export * from './lib/components/textbox';
+export * from './lib/components/textbox-currency';
 
 // Formly
 export * from './lib/formly';
+
+// Directives
+export * from './lib/shared/directives';
 
 // Pipes
 export * from './lib/shared/pipes';
