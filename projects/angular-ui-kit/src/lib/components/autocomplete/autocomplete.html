@@ -9,6 +9,7 @@
 		matInput
 		[value]="inputValue()"
 		[class]="field().config.inputClass || ''"
+		[placeholder]="field().config.placeholder || ''"
 		(input)="
 			onInput($any($event.target).value); field().onInput ? field().onInput?.($event) : null
 		"
@@ -25,4 +26,6 @@
 			</mat-option>
 		}
 	</mat-autocomplete>
+	
+    <mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
