@@ -1,4 +1,30 @@
 <div class="tw:container tw:m-auto tw:mt-10">
+	<lib-autocomplete
+		class="no-hint"
+		[field]="{
+			key: 'firstName',
+			type: 'autocomplete',
+			control: $any(formData.firstName),
+			config: {
+				label: 'Trip Package',
+				placeholder: 'Search by title, ex: Umrah',
+				options: {
+					data: [
+						{
+							label: 'Umrah',
+							value: 'umrah',
+						},
+						{
+							label: 'Hajj',
+							value: 'hajj',
+						},
+					],
+					labelKey: 'label',
+					valueKey: 'value',
+				},
+			},
+		}" />
+
 	<lib-formly [formConfig]="formConfig" />
 	<lib-button [config]="submitBtn" />
 

@@ -9,14 +9,23 @@
 		matInput
 		[value]="inputValue()"
 		[class]="field().config.inputClass || ''"
-		(input)="onInput($any($event.target).value)"
+		[placeholder]="field().config.placeholder || ''"
+		(input)="
+			onInput($any($event.target).value); field().onInput ? field().onInput?.($event) : null
+		"
 		[matAutocomplete]="auto" />
 
-	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelect($event.option.value)">
+	<mat-autocomplete
+		#auto="matAutocomplete"
+		(optionSelected)="
+			onSelect($event.option.value); field().onChange ? field().onChange?.($event) : null
+		">
 		@for (option of normalizedOptions(); track $index) {
 			<mat-option [value]="option.value">
 				{{ option.label }}
 			</mat-option>
 		}
 	</mat-autocomplete>
+	
+    <mat-icon matSuffix>search</mat-icon>
 </mat-form-field>

@@ -4,6 +4,7 @@ import { applyEach, email, form, required, submit } from '@angular/forms/signals
 import { Sort } from '@angular/material/sort';
 import { RouterOutlet } from '@angular/router';
 import {
+	Autocomplete,
 	Button,
 	ButtonModel,
 	Formly,
@@ -15,7 +16,7 @@ import { BLOG_CATEGORY_CUSTOM_TYPE, BLOG_CATEGORY_TABLE, FormConfig, IExample } 
 
 @Component({
 	selector: 'app-root',
-	imports: [RouterOutlet, Formly, Table, Button],
+	imports: [RouterOutlet, Autocomplete, Formly, Table, Button],
 	templateUrl: './app.html',
 	styleUrl: './app.css',
 	encapsulation: ViewEncapsulation.None,
