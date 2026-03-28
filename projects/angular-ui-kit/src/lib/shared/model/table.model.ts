@@ -56,7 +56,7 @@ export class TableModel {
 			if (!this.columns.some((t) => t.key === key)) continue;
 
 			let dataType: DataType = '';
-			if (this.isValidDateString(keyValue)) {
+			if (this.isValidDateFormat(keyValue)) {
 				dataType = 'date';
 			} else if (typeof keyValue === 'number') {
 				dataType = 'number';
@@ -69,14 +69,60 @@ export class TableModel {
 			this.dataType[key] = { type: dataType };
 		}
 
+		console.log('this.dataType', this);
+
 		return this;
 	}
 
-	isValidDateString(value: unknown): boolean {
-		if (typeof value !== 'string') return false;
+	/* isValidDate(value: unknown): boolean {
+		if (value instanceof Date) {
+			return !isNaN(value.getTime());
+		}
 
-		const d = new Date(value);
-		return !isNaN(d.getTime());
+		if (typeof value === 'string') {
+			// Check if string matches common date formats (ISO, timestamp, etc.)
+			const dateRegex = /^\d{4}-\d{2}-\d{2}|^\d{1,2}\/\d{1,2}\/\d{4}|^\d{10,13}$/;
+			if (!dateRegex.test(value)) {
+				return false;
+			}
+			const d = new Date(value);
+			return !isNaN(d.getTime());
+		}
+
+		if (typeof value === 'number') {
+			const d = new Date(value);
+			return !isNaN(d.getTime());
+		}
+
+		return false;
+	} */
+
+	/**
+	 * Memvalidasi format tanggal (ISO, YYYY-MM-DD, MM/DD/YYYY, dll)
+	 * Mengabaikan format Epoch/Timestamp murni.
+	 */
+	isValidDateFormat(dateInput: any): boolean {
+		// 1. Tolak jika bukan string atau input murni angka (Epoch)
+		if (typeof dateInput !== 'string' || !isNaN(Number(dateInput))) {
+			return false;
+		}
+
+		// 2. Tambahkan Filter Regex: Harus mengandung pemisah tanggal umum
+		// Minimal ada 2 angka dan pemisah seperti / - atau .
+		// Contoh: 2024-01-01 atau 01/01/2024
+		const datePattern = /^[0-9]{1,4}[.\-\/][0-9]{1,2}[.\-\/][0-9]{1,4}/;
+		const isStandardFormat = datePattern.test(dateInput.trim());
+
+		// Jika tidak sesuai pola umum, cek apakah ini format Long Date (Jan 1, 2024)
+		const isLongDate = /^[A-Za-z]{3,}\s\d{1,2},?\s\d{4}/.test(dateInput.trim());
+
+		if (!isStandardFormat && !isLongDate) {
+			return false;
+		}
+
+		// 3. Jika lolos regex, baru cek validitas kalender
+		const parsedDate = new Date(dateInput);
+		return !isNaN(parsedDate.getTime());
 	}
 
 	isEmpty(): boolean {
