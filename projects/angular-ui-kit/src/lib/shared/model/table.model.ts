@@ -56,7 +56,7 @@ export class TableModel {
 			if (!this.columns.some((t) => t.key === key)) continue;
 
 			let dataType: DataType = '';
-			if (this.isValidDateString(keyValue)) {
+			if (this.isValidDateFormat(keyValue)) {
 				dataType = 'date';
 			} else if (typeof keyValue === 'number') {
 				dataType = 'number';
@@ -72,11 +72,32 @@ export class TableModel {
 		return this;
 	}
 
-	isValidDateString(value: unknown): boolean {
-		if (typeof value !== 'string') return false;
+	/**
+	 * Memvalidasi format tanggal (ISO, YYYY-MM-DD, MM/DD/YYYY, dll)
+	 * Mengabaikan format Epoch/Timestamp murni.
+	 */
+	isValidDateFormat(dateInput: any): boolean {
+		// 1. Tolak jika bukan string atau input murni angka (Epoch)
+		if (typeof dateInput !== 'string' || !isNaN(Number(dateInput))) {
+			return false;
+		}
 
-		const d = new Date(value);
-		return !isNaN(d.getTime());
+		// 2. Tambahkan Filter Regex: Harus mengandung pemisah tanggal umum
+		// Minimal ada 2 angka dan pemisah seperti / - atau .
+		// Contoh: 2024-01-01 atau 01/01/2024
+		const datePattern = /^[0-9]{1,4}[.\-\/][0-9]{1,2}[.\-\/][0-9]{1,4}/;
+		const isStandardFormat = datePattern.test(dateInput.trim());
+
+		// Jika tidak sesuai pola umum, cek apakah ini format Long Date (Jan 1, 2024)
+		const isLongDate = /^[A-Za-z]{3,}\s\d{1,2},?\s\d{4}/.test(dateInput.trim());
+
+		if (!isStandardFormat && !isLongDate) {
+			return false;
+		}
+
+		// 3. Jika lolos regex, baru cek validitas kalender
+		const parsedDate = new Date(dateInput);
+		return !isNaN(parsedDate.getTime());
 	}
 
 	isEmpty(): boolean {
@@ -120,20 +141,15 @@ export class TableModel {
 	}
 
 	hasNext(hasNext: boolean): void {
-		if (!hasNext && this.pageIndex <= 1) {
-			this.dataTotal = this.dataSource?.length ?? 0;
+		const currentPage = Math.max(this.pageIndex, 0) + 1;
+		const currentLength = this.dataSource?.length ?? 0;
+
+		if (hasNext) {
+			this.dataTotal = (currentPage + 1) * this.pageSize;
 			return;
 		}
 
 		this.dataTotal =
-			this.pageIndex === 1 ? this.pageSize * 2 : this.pageSize * (this.pageIndex + 1);
-
-		const diffData = this.pageSize - this.dataSource?.length;
-
-		/* totalData substracted by diffData if data < pageSize  */
-		if (diffData !== 0) this.dataTotal -= diffData;
-
-		/* totalData substracted by pageSize if isNext false */
-		if (!hasNext) this.dataTotal -= this.pageSize;
+			currentPage > 1 ? (currentPage - 1) * this.pageSize + currentLength : currentLength;
 	}
 }

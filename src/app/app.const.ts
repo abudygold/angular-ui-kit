@@ -24,55 +24,56 @@ export interface IExample {
 	}[];
 }
 
-export const BLOG_CATEGORY_CUSTOM_TYPE = {
-	label: {
-		type: '',
+export const DUMMY_CUSTOM_TYPE = {
+	selection: {
+		type: 'custom',
 	},
-	value: {
-		type: '',
+	name: {
+		type: 'custom',
 	},
-	createdAt: {
-		type: 'date',
-		format: 'dd MMM yyyy',
+	lang: {
+		type: 'custom',
 	},
-	updatedAt: {
-		type: 'date',
-		format: 'dd MMM yyyy',
+	category: {
+		type: 'custom',
+	},
+	actions: {
+		type: 'custom',
 	},
 };
 
-export const BLOG_CATEGORY_TABLE: TableModel = new TableModel();
-BLOG_CATEGORY_TABLE.columns = [
+export const DUMMY_TABLE: TableModel = new TableModel();
+DUMMY_TABLE.columns = [
 	{
-		key: 'label',
-		label: 'Label',
+		key: 'selection',
+		label: '',
+		sortable: false,
+	},
+	{
+		key: 'name',
+		label: 'Name',
 		sortable: true,
 	},
 	{
-		key: 'value',
-		label: 'Value',
-		sortable: true,
+		key: 'lang',
+		label: 'Lang',
+		sortable: false,
 	},
 	{
-		key: 'code',
-		label: 'Code',
-		sortable: true,
+		key: 'category',
+		label: 'Category',
+		sortable: false,
 	},
 	{
-		key: 'createdAt',
-		label: 'Created At',
-		sortable: true,
-	},
-	{
-		key: 'updatedAt',
-		label: 'Updated At',
-		sortable: true,
+		key: 'actions',
+		label: 'Actions',
+		sortable: false,
 	},
 ];
-BLOG_CATEGORY_TABLE.sortActive = 'createdAt';
-BLOG_CATEGORY_TABLE.sortDirection = 'desc';
-BLOG_CATEGORY_TABLE.isServerSide.set(false);
-BLOG_CATEGORY_TABLE.isPagination.set(true);
+DUMMY_TABLE.sortActive = 'name';
+DUMMY_TABLE.sortDirection = 'asc';
+DUMMY_TABLE.isServerSide.set(true);
+DUMMY_TABLE.isPagination.set(true);
 
 export const FormConfig = (
 	formData: FieldTree<IExample, string | number>,

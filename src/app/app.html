@@ -32,6 +32,37 @@
 		[config]="tableModel"
 		(sortChange)="sortChange($event)"
 		(pageChange)="pageChange($event)">
+		<ng-template #customTemplate let-data="data" let-key="key">
+			@if (key === 'selection') {
+				<!-- <div [class.show-checkbox]="data.isSelected">
+					<mat-checkbox
+						class="check-box check__file"
+						[checked]="tableModel.isSelected(data)"
+						(change)="onRowSelection(data)" />
+				</div> -->
+			} @else if (key === 'name' || key === 'lang' || key === 'category') {
+				{{ data[key] }}
+			} @else if (key === 'actions') {
+				<!-- <div class="tw:flex tw:gap-3">
+					<fa-icon
+						[icon]="faIcon.faEdit"
+						size="lg"
+						class="tw:text-blue-400"
+						(click)="openDialog(data)" />
+					<fa-icon
+						[icon]="faIcon.faTrash"
+						size="lg"
+						class="tw:text-red-400"
+						(click)="onAction('delete', data?.id)" />
+				</div> -->
+			}
+		</ng-template>
+
+		<ng-template #selectionTemplate>
+			<div class="filter-list">
+				<!-- <mat-checkbox class="check__file" (change)="onAllSelection($event.checked)" /> -->
+			</div>
+		</ng-template>
 	</lib-table>
 
 	<router-outlet />
