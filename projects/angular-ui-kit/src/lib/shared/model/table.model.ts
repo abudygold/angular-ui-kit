@@ -69,33 +69,8 @@ export class TableModel {
 			this.dataType[key] = { type: dataType };
 		}
 
-		console.log('this.dataType', this);
-
 		return this;
 	}
-
-	/* isValidDate(value: unknown): boolean {
-		if (value instanceof Date) {
-			return !isNaN(value.getTime());
-		}
-
-		if (typeof value === 'string') {
-			// Check if string matches common date formats (ISO, timestamp, etc.)
-			const dateRegex = /^\d{4}-\d{2}-\d{2}|^\d{1,2}\/\d{1,2}\/\d{4}|^\d{10,13}$/;
-			if (!dateRegex.test(value)) {
-				return false;
-			}
-			const d = new Date(value);
-			return !isNaN(d.getTime());
-		}
-
-		if (typeof value === 'number') {
-			const d = new Date(value);
-			return !isNaN(d.getTime());
-		}
-
-		return false;
-	} */
 
 	/**
 	 * Memvalidasi format tanggal (ISO, YYYY-MM-DD, MM/DD/YYYY, dll)
@@ -166,20 +141,15 @@ export class TableModel {
 	}
 
 	hasNext(hasNext: boolean): void {
-		if (!hasNext && this.pageIndex <= 1) {
-			this.dataTotal = this.dataSource?.length ?? 0;
+		const currentPage = Math.max(this.pageIndex, 0) + 1;
+		const currentLength = this.dataSource?.length ?? 0;
+
+		if (hasNext) {
+			this.dataTotal = (currentPage + 1) * this.pageSize;
 			return;
 		}
 
 		this.dataTotal =
-			this.pageIndex === 1 ? this.pageSize * 2 : this.pageSize * (this.pageIndex + 1);
-
-		const diffData = this.pageSize - this.dataSource?.length;
-
-		/* totalData substracted by diffData if data < pageSize  */
-		if (diffData !== 0) this.dataTotal -= diffData;
-
-		/* totalData substracted by pageSize if isNext false */
-		if (!hasNext) this.dataTotal -= this.pageSize;
+			currentPage > 1 ? (currentPage - 1) * this.pageSize + currentLength : currentLength;
 	}
 }
