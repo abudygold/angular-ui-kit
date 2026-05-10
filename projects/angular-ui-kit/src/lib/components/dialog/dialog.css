@@ -4,10 +4,14 @@
 	justify-content: space-between;
 	align-items: center;
 	gap: 16px;
+	line-height: unset;
 	border-bottom: 1px solid rgba(0, 0, 45, 0.15);
 	h1 {
 		font-size: 20px;
 		font-weight: 500;
+	}
+	small {
+		font-size: 10px;
 	}
 	.header-action {
 		display: flex;
