@@ -1,88 +1,134 @@
-import { Directive, ElementRef, HostListener, inject, input, OnInit } from '@angular/core';
-import { CurrencyIntlPipe } from '../pipes';
+import {
+	Directive,
+	ElementRef,
+	HostListener,
+	afterRenderEffect,
+	inject,
+	input,
+} from '@angular/core';
+import { CurrencyIntlPipe } from '@devkitify/angular-ui-kit';
+
+type CurrencyFieldTree = {
+	(): {
+		value: {
+			(): string | number | null | undefined;
+			set(value: string | number | null): void;
+		};
+	};
+};
 
 @Directive({
 	selector: '[currencyIntlInput]',
 	standalone: true,
 	providers: [CurrencyIntlPipe],
 })
-export class CurrencyIntlInputDirective implements OnInit {
+export class CurrencyIntlInputDirective {
 	private elementRef = inject(ElementRef<HTMLInputElement>);
 	private currencyPipe = inject(CurrencyIntlPipe);
 
-	currency = input<string>('USD');
-	locale = input<string>('en-US');
-
 	/**
-	 * Digunakan kalau mau allow value kosong.
+	 * Isi dengan field dari signal forms.
+	 *
 	 * Contoh:
-	 * <input currencyIntlInput [allowEmpty]="true" />
+	 * [currencyIntlInput]="packageForm.basePrice"
 	 */
+	currencyIntlInput = input<CurrencyFieldTree | null>(null);
+
+	currency = input<string>('IDR');
+	locale = input<string>('id-ID');
 	allowEmpty = input<boolean>(true);
 
-	/**
-	 * Ambil angka saja dari string.
-	 * Contoh:
-	 * "Rp 10.000" -> "10000"
-	 */
-	private onlyDigits(value: string | null | undefined): string {
-		return (value ?? '').replace(/\D/g, '');
+	private isWritingView = false;
+	private isTyping = false;
+
+	constructor() {
+		afterRenderEffect(() => {
+			const field = this.currencyIntlInput();
+
+			if (!field || this.isTyping) {
+				return;
+			}
+
+			const value = field().value();
+			this.writeFormattedView(value);
+		});
 	}
 
-	private formatValue(value: string | number | null | undefined): string {
-		const digits = this.onlyDigits(String(value ?? ''));
+	private onlyDigits(value: string | number | null | undefined): string {
+		return String(value ?? '').replace(/\D/g, '');
+	}
+
+	private toNumber(value: string | number | null | undefined): number | null {
+		const digits = this.onlyDigits(value);
 
 		if (!digits) {
-			return this.allowEmpty()
-				? ''
-				: this.currencyPipe.transform(0, this.currency(), this.locale(), 0, 0);
+			return this.allowEmpty() ? null : 0;
 		}
 
 		const numberValue = Number(digits);
 
-		if (Number.isNaN(numberValue)) {
+		return Number.isNaN(numberValue) ? null : numberValue;
+	}
+
+	private formatValue(value: string | number | null | undefined): string {
+		const numberValue = this.toNumber(value);
+
+		if (numberValue === null) {
 			return '';
 		}
 
 		return this.currencyPipe.transform(numberValue, this.currency(), this.locale(), 0, 0);
 	}
 
-	private setNativeValue(value: string): void {
-		this.elementRef.nativeElement.value = value;
+	private writeFormattedView(value: string | number | null | undefined): void {
+		const formattedValue = this.formatValue(value);
+		const input = this.elementRef.nativeElement;
+
+		if (input.value === formattedValue) {
+			return;
+		}
+
+		this.isWritingView = true;
+		input.value = formattedValue;
+		this.isWritingView = false;
 	}
 
-	private dispatchInputEvent(): void {
-		this.elementRef.nativeElement.dispatchEvent(
-			new Event('input', {
-				bubbles: true,
-			}),
-		);
+	private updateFieldValue(): void {
+		const field = this.currencyIntlInput();
+
+		if (!field) {
+			return;
+		}
+
+		const input = this.elementRef.nativeElement;
+		const numberValue = this.toNumber(input.value);
+
+		field().value.set(numberValue);
 	}
 
 	private moveCaretToEnd(): void {
 		queueMicrotask(() => {
 			const input = this.elementRef.nativeElement;
 			const length = input.value.length;
+
 			input.setSelectionRange(length, length);
 		});
 	}
 
-	private updateFormattedValue(): void {
-		const input = this.elementRef.nativeElement;
-		const formattedValue = this.formatValue(input.value);
-
-		this.setNativeValue(formattedValue);
-		this.dispatchInputEvent();
+	@HostListener('focus')
+	onFocus(): void {
+		this.isTyping = true;
 		this.moveCaretToEnd();
 	}
 
-	@HostListener('focus')
-	onFocus(): void {
-		/**
-		 * Jangan ubah ke angka polos saat focus.
-		 * Ini membuat user tetap bisa melihat format ribuan/nol saat input.
-		 */
-		this.moveCaretToEnd();
+	@HostListener('blur')
+	onBlur(): void {
+		this.isTyping = false;
+
+		const field = this.currencyIntlInput();
+		const value = field ? field().value() : this.elementRef.nativeElement.value;
+
+		this.writeFormattedView(value);
 	}
 
 	@HostListener('keydown', ['$event'])
@@ -104,7 +150,6 @@ export class CurrencyIntlInputDirective implements OnInit {
 		const key = event.key.toLowerCase();
 		const isModifierPressed = event.ctrlKey || event.metaKey;
 
-		// Allow select all, copy, paste, cut, undo, redo
 		if (isModifierPressed && ['a', 'c', 'v', 'x', 'z', 'y'].includes(key)) {
 			return;
 		}
@@ -113,7 +158,6 @@ export class CurrencyIntlInputDirective implements OnInit {
 			return;
 		}
 
-		// Allow only number
 		if (/^\d$/.test(event.key)) {
 			return;
 		}
@@ -123,21 +167,18 @@ export class CurrencyIntlInputDirective implements OnInit {
 
 	@HostListener('input')
 	onInput(): void {
-		this.updateFormattedValue();
-	}
-
-	@HostListener('blur')
-	onBlur(): void {
-		const input = this.elementRef.nativeElement;
-		const digits = this.onlyDigits(input.value);
-
-		if (!digits && this.allowEmpty()) {
-			this.setNativeValue('');
-			this.dispatchInputEvent();
+		if (this.isWritingView) {
 			return;
 		}
 
-		this.updateFormattedValue();
+		this.isTyping = true;
+
+		const input = this.elementRef.nativeElement;
+		const numberValue = this.toNumber(input.value);
+
+		this.writeFormattedView(numberValue);
+		this.updateFieldValue();
+		this.moveCaretToEnd();
 	}
 
 	@HostListener('paste', ['$event'])
@@ -145,28 +186,21 @@ export class CurrencyIntlInputDirective implements OnInit {
 		event.preventDefault();
 
 		const pastedText = event.clipboardData?.getData('text/plain') ?? '';
-		const digits = this.onlyDigits(pastedText);
+		const pastedDigits = this.onlyDigits(pastedText);
 
-		if (!digits) {
+		if (!pastedDigits) {
 			return;
 		}
 
 		const input = this.elementRef.nativeElement;
 		const currentDigits = this.onlyDigits(input.value);
 
-		/**
-		 * Simpel behavior:
-		 * paste akan append ke angka yang sudah ada.
-		 * Contoh current Rp 10.000, paste 500 -> Rp 10.000.500
-		 */
-		this.setNativeValue(currentDigits + digits);
-		this.updateFormattedValue();
-	}
+		input.value = currentDigits + pastedDigits;
 
-	ngOnInit(): void {
-		const input = this.elementRef.nativeElement;
-		const formattedValue = this.formatValue(input.value);
+		const numberValue = this.toNumber(input.value);
 
-		this.setNativeValue(formattedValue);
+		this.writeFormattedView(numberValue);
+		this.updateFieldValue();
+		this.moveCaretToEnd();
 	}
 }
