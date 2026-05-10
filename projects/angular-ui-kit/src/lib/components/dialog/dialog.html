@@ -1,5 +1,10 @@
 <div mat-dialog-title>
-	<h1>{{ title() }}</h1>
+	<div>
+		<h1>{{ title() }}</h1>
+		@if (subtitle()) {
+			<small>{{ subtitle() }}</small>
+		}
+	</div>
 
 	<div class="header-action">
 		<ng-content select="[dialogSubTitle]" />

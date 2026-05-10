@@ -10,4 +10,5 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class Dialog {
 	title = input.required();
+	subtitle = input();
 }
