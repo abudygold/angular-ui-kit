@@ -6,7 +6,7 @@ import {
 	inject,
 	input,
 } from '@angular/core';
-import { CurrencyIntlPipe } from '@devkitify/angular-ui-kit';
+import { CurrencyIntlPipe } from '../pipes';
 
 type CurrencyFieldTree = {
 	(): {
