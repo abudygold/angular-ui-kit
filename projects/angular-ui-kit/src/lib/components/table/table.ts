@@ -68,7 +68,7 @@ export class Table {
 
 		for (let i = 0; i < props.length; i++) {
 			if (obj === null || obj === undefined) {
-				return 'N/A';
+				return null;
 			}
 			obj = obj[props[i]];
 		}

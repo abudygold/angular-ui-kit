@@ -54,19 +54,24 @@
 									@case ('date') {
 										{{
 											getPropertyValue(data, column.key)
-												| date
-													: config().dataType[column.key].format ||
-															'mediumDate'
+												? (getPropertyValue(data, column.key)
+													| date
+														: config().dataType[column.key].format ||
+																'mediumDate')
+												: '-'
 										}}
 									}
 									@case ('number') {
-										{{ getPropertyValue(data, column.key) }}
+										{{ displayValue(getPropertyValue(data, column.key)) }}
 									}
 									@case ('title') {
-										{{ getPropertyValue(data, column.key) | titlecase }}
+										{{
+											getPropertyValue(data, column.key)
+												? (getPropertyValue(data, column.key) | titlecase)
+												: '-'
+										}}
 									}
 									@case ('currency') {
-										<!-- {{ 123456.789 | currencyIntl:'JPY':'ja-JP':0:0 }} -->
 										{{
 											getPropertyValue(data, column.key) || 0
 												| currencyIntl
