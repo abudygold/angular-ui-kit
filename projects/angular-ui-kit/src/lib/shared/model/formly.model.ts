@@ -12,6 +12,7 @@ type FormlyFieldType =
 	| 'autocomplete'
 	| 'chip'
 	| 'slide-toggle'
+	| 'currency'
 	| 'array';
 
 type TextBoxType = 'text' | 'password' | 'email' | 'number' | 'textarea';

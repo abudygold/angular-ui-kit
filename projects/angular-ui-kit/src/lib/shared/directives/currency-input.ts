@@ -54,6 +54,14 @@ export class CurrencyIntlInputDirective {
 		});
 	}
 
+	private notifyInputChange(): void {
+		this.elementRef.nativeElement.dispatchEvent(
+			new Event('input', {
+				bubbles: true,
+			}),
+		);
+	}
+
 	private onlyDigits(value: string | number | null | undefined): string {
 		return String(value ?? '').replace(/\D/g, '');
 	}
@@ -90,6 +98,13 @@ export class CurrencyIntlInputDirective {
 
 		this.isWritingView = true;
 		input.value = formattedValue;
+
+		/**
+		 * Notify Angular Material mat-form-field
+		 * supaya label float ketika value di-set dari directive.
+		 */
+		this.notifyInputChange();
+
 		this.isWritingView = false;
 	}
 
@@ -97,6 +112,7 @@ export class CurrencyIntlInputDirective {
 		const field = this.currencyIntlInput();
 
 		if (!field) {
+			console.log('@@@ return');
 			return;
 		}
 

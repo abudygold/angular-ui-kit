@@ -1,4 +1,7 @@
-<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
+<mat-form-field
+	[appearance]="field().config.appearance || 'outline'"
+	class="tw:w-full"
+	floatLabel="always">
 	@if (field().config.label) {
 		<mat-label [class]="field().config.labelClass || ''">
 			{{ field().config.label }}
@@ -12,7 +15,6 @@
 		[locale]="field().config.texboxCurrency?.locale || 'en-US'"
 		type="text"
 		autocomplete="off"
-		[formField]="$any(field().control)"
 		[class]="field().config.inputClass || ''"
 		[placeholder]="field().config.placeholder || ''"
 		(blur)="field().onBlur ? field().onBlur?.($event) : null"

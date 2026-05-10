@@ -14,6 +14,10 @@
 				<lib-textbox [field]="field" [class.no-hint]="!field?.config?.hint" />
 			}
 
+			@case ('currency') {
+				<lib-textbox-currency [field]="field" [class.no-hint]="!field?.config?.hint" />
+			}
+
 			@case ('textarea') {
 				<lib-textarea [field]="field" [class.no-hint]="!field?.config?.hint" />
 			}

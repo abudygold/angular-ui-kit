@@ -31,6 +31,7 @@ export class App {
 		dob: null,
 		birthPlace: '',
 		age: 0,
+		price: 0,
 		hobbies: [],
 		child: [],
 	});
@@ -41,6 +42,7 @@ export class App {
 		email(schemaPath.email, { message: 'Invalid email format' });
 		required(schemaPath.dob, { message: 'Date of Birth is required' });
 		required(schemaPath.age, { message: 'Age is required' });
+		required(schemaPath.price, { message: 'Price is required' });
 		applyEach(schemaPath.child, (item) => {
 			required(item.firstName, { message: 'First name is required' });
 			required(item.email, { message: 'Email is required' });
