@@ -17,6 +17,7 @@ export * from './lib/components/table';
 export * from './lib/components/textarea';
 export * from './lib/components/textbox';
 export * from './lib/components/textbox-currency';
+export * from './lib/components/status-badge';
 
 // Services
 export * from './lib/shared/services';
