@@ -11,36 +11,46 @@ Welcome to the Angular UI Kit! This project provides reusable Angular components
 
 ## Features
 
-- Prebuilt UI components (Table, Breadcrumbs, Buttons, etc.)
+- Prebuilt UI components (Table, Buttons, etc.)
 - Angular Material integration
 - Customizable themes
 - Easy to use and extend
 
-## Getting Started
+## Quick Start
 
-To use this library in your Angular project, install it via npm:
-
+1. **Install the package:**
 ```bash
 npm install @devkitify/angular-ui-kit
 ```
 
-Then, import the desired modules into your application:
-
+2. **Import a component in your module:**
 ```typescript
-import { TableComponent, TableModel } from '@devkitify/angular-ui-kit';
+import { Table, TableModel } from '@devkitify/angular-ui-kit';
+
+// Use in your component
+```
+
+3. **Configure and use:**
+```typescript
+const tableConfig = signal<TableModel>(new TableModel());
+// Configure your component
+```
+
+4. **Add Material Theme** (optional):
+```scss
+// In your styles.scss
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 ```
 
 ## Folder Structure
 
 - **Components**
     - [Autocomplete](#autocomplete) - Search with autocomplete suggestions
-    - [Breadcrumbs](#breadcrumbs) - Navigation breadcrumb component
     - [Button](#button) - Customizable button component
     - [Checkbox](#checkbox) - Multi-select checkbox group
     - [Chip](#chip) - Chip/tag display component
     - [Datepicker](#datepicker) - Date selection component
     - [Dropdown](#dropdown) - Select dropdown with infinite scroll
-    - [Dialog](#dialog) - Modal dialog component
     - [Radio Button](#radio-button) - Radio group selector
     - [Slide Toggle](#slide-toggle) - Toggle switch component
     - [Table](#table) - Advanced data table with sorting & pagination
@@ -48,7 +58,7 @@ import { TableComponent, TableModel } from '@devkitify/angular-ui-kit';
     - [Textbox](#textbox) - Single-line text input
     - [Textbox Currency](#textbox-currency) - Formatted currency input
 - **Services**
-    - [API](#api) - HTTP API service utilities
+    - [BaseService](./README-SERVICE.md) - HTTP client wrapper dengan multi-project support
 - **Shared**
     - Model - Type definitions and models
     - Pipes
@@ -553,34 +563,6 @@ export class AutocompleteExampleComponent {
     ]
   });
 }
-```
-
----
-
-## Quick Start
-
-1. **Install the package:**
-```bash
-npm install @devkitify/angular-ui-kit
-```
-
-2. **Import a component in your module:**
-```typescript
-import { Table, TableModel } from '@devkitify/angular-ui-kit';
-
-// Use in your component
-```
-
-3. **Configure and use:**
-```typescript
-const tableConfig = signal<TableModel>(new TableModel());
-// Configure your component
-```
-
-4. **Add Material Theme** (optional):
-```scss
-// In your styles.scss
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
 ```
 
 ---

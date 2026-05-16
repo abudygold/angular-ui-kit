@@ -1,0 +1,10 @@
+@let cfg = config();
+
+<div [ngClass]="badgeClass">
+	@if (cfg.icon) {
+		<span class="badge-icon">
+			{{ cfg.icon }}
+		</span>
+	}
+	<span class="badge-text">{{ cfg.text }}</span>
+</div>
