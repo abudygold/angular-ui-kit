@@ -1,16 +1,20 @@
-import { Component, computed, input, signal } from '@angular/core';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import {
+	MatAutocompleteModule,
+	MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormlyField } from '../../shared/model';
-import { optionGenerator } from '../../shared/utils';
+import { getFormlyOptionsConfig, optionGenerator } from '../../shared/utils';
 
 @Component({
 	selector: 'lib-autocomplete',
 	imports: [MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatIconModule],
 	templateUrl: './autocomplete.html',
 	styleUrl: './autocomplete.css',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Autocomplete {
 	#keyword = signal('');
@@ -18,32 +22,38 @@ export class Autocomplete {
 	field = input.required<FormlyField>();
 
 	normalizedOptions = computed(() => {
-		const _options = this.field().config.options;
-		const _optionGenerator = optionGenerator(_options);
+		const options = optionGenerator(getFormlyOptionsConfig(this.field()));
+		const keyword = this.#keyword().trim().toLowerCase();
 
-		if (this.#keyword()) {
-			return _optionGenerator.filter((option: any) => {
-				return option.label.toLowerCase().includes(this.#keyword().toLowerCase());
-			});
+		if (keyword) {
+			return options.filter((option) => option.label.toLowerCase().includes(keyword));
 		}
 
-		return _optionGenerator;
+		return options;
 	});
 
 	inputValue = computed(() => {
-		const selected = this.normalizedOptions().find(
-			(o) => o.value === this.field().control().value(),
+		if (this.#keyword()) return this.#keyword();
+
+		const selected = optionGenerator(getFormlyOptionsConfig(this.field())).find(
+			(option) => option.value === this.field().control().value(),
 		);
 		return selected?.label ?? '';
 	});
 
-	onInput(value: string) {
+	onInput(event: Event): void {
+		const value = (event.target as HTMLInputElement | null)?.value ?? '';
 		this.#keyword.set(value);
-		this.normalizedOptions();
+		this.field().onInput?.(event);
 	}
 
-	onSelect(value: any) {
+	onSelect(event: MatAutocompleteSelectedEvent): void {
 		this.#keyword.set('');
-		this.field().control().value.set(value);
+		this.field().control().value.set(event.option.value);
+		this.field().onChange?.(event);
+	}
+
+	onBlur(event: FocusEvent): void {
+		this.field().onBlur?.(event);
 	}
 }

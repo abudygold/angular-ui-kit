@@ -1,29 +1,30 @@
-<mat-label [class]="field().config.labelClass || ''">
-	{{ field().config.label }}
-</mat-label>
+@let formField = field();
+@let config = formField.config;
 
-<!-- Select All -->
-@if (field().config.checkbox?.isSelectAll) {
+@if (config.label) {
+	<mat-label [class]="config.labelClass || ''">
+		{{ config.label }}
+	</mat-label>
+}
+
+@if (config.checkbox?.isSelectAll) {
 	<mat-checkbox
 		[checked]="isAllSelected()"
 		[indeterminate]="isIndeterminate()"
-		[class]="field().config.selectAllClass || ''"
-		[labelPosition]="field().config.checkbox?.align || 'after'"
-		(change)="toggleAll($event.checked); field().onChange ? field().onChange?.($event) : null">
-		{{ field().config.checkbox?.selectAllLabel || 'Select All' }}
+		[class]="config.selectAllClass || ''"
+		[labelPosition]="config.checkbox?.align || 'after'"
+		(change)="toggleAll($event)">
+		{{ config.checkbox?.selectAllLabel || 'Select All' }}
 	</mat-checkbox>
 }
 
-<div [class]="field().config.inputClass || ''">
-	@for (option of normalizedOptions(); track $index) {
+<div [class]="config.inputClass || ''">
+	@for (option of normalizedOptions(); track option.value) {
 		<mat-checkbox
-			[class]="field().config.optionClass || ''"
-			[checked]="$any(field().control().value()).includes(option.value)"
-			[labelPosition]="field().config.checkbox?.align || 'after'"
-			(change)="
-				toggle(option.value, $event.checked);
-				field().onChange ? field().onChange?.($event) : null
-			">
+			[class]="config.optionClass || ''"
+			[checked]="isChecked(option.value)"
+			[labelPosition]="config.checkbox?.align || 'after'"
+			(change)="toggle(option.value, $event)">
 			{{ option.label }}
 		</mat-checkbox>
 	}

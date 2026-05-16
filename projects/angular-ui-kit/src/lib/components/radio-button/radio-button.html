@@ -1,13 +1,18 @@
-<mat-label [class]="field().config.labelClass || ''">
-	{{ field().config.label }}
-</mat-label>
+@let formField = field();
+@let config = formField.config;
+
+@if (config.label) {
+	<mat-label [class]="config.labelClass || ''">
+		{{ config.label }}
+	</mat-label>
+}
 
 <mat-radio-group
-	[formField]="$any(field().control)"
-	[class]="field().config.inputClass || ''"
-	(change)="field().onChange ? field().onChange?.($event) : null">
-	@for (option of normalizedOptions(); track $index) {
-		<mat-radio-button [value]="option.value" [class]="field().config.optionClass || ''">
+	[formField]="$any(formField.control)"
+	[class]="config.inputClass || ''"
+	(change)="onChange($event)">
+	@for (option of normalizedOptions(); track option.value) {
+		<mat-radio-button [value]="option.value" [class]="config.optionClass || ''">
 			{{ option.label }}
 		</mat-radio-button>
 	}

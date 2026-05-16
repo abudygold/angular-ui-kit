@@ -14,24 +14,25 @@ import { ButtonModel } from '../../shared/model';
 export class Button {
 	config = input.required<ButtonModel>();
 
-	get buttonClass() {
-		switch (this.config().appearance) {
+	get buttonClass(): string {
+		const config = this.config();
+		const customClass = config.buttonClass ?? '';
+
+		switch (config.appearance) {
 			case 'raised':
-				return `mat-mdc-raised-button ${this.config().buttonClass}`;
+				return `mat-mdc-raised-button ${customClass}`;
 			case 'stroked':
-				return `mat-mdc-outlined-button ${this.config().buttonClass}`;
+				return `mat-mdc-outlined-button ${customClass}`;
 			case 'flat':
-				return `mat-mdc-unelevated-button ${this.config().buttonClass}`;
+				return `mat-mdc-unelevated-button ${customClass}`;
 			case 'fab':
-				return `mat-mdc-fab ${this.config().buttonClass}`;
+				return `mat-mdc-fab ${customClass}`;
 			default:
-				return `mdc-button ${this.config().buttonClass}`;
+				return `mdc-button ${customClass}`;
 		}
 	}
 
-	handleClick() {
-		if (!this.config().onClick) return;
-
+	handleClick(): void {
 		this.config().onClick?.();
 	}
 }

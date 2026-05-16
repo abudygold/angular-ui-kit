@@ -10,6 +10,7 @@ import { FormField } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormlyField } from '../../shared/model';
+import { getFormlyValueLength } from '../../shared/utils';
 
 @Component({
 	selector: 'lib-textbox',
@@ -22,14 +23,30 @@ export class Textbox {
 	field = input.required<FormlyField>();
 
 	@ContentChild('matPrefixRef')
-	public matPrefixRef!: TemplateRef<any> | null;
+	matPrefixRef!: TemplateRef<any> | null;
 
 	@ContentChild('matSuffixRef')
-	public matSuffixRef!: TemplateRef<any> | null;
+	matSuffixRef!: TemplateRef<any> | null;
 
 	@ContentChild('matTextPrefixRef')
-	public matTextPrefixRef!: TemplateRef<any> | null;
+	matTextPrefixRef!: TemplateRef<any> | null;
 
 	@ContentChild('matTextSuffixRef')
-	public matTextSuffixRef!: TemplateRef<any> | null;
+	matTextSuffixRef!: TemplateRef<any> | null;
+
+	valueLength(): number {
+		return getFormlyValueLength(this.field());
+	}
+
+	onBlur(event: Event): void {
+		this.field().onBlur?.(event);
+	}
+
+	onInput(event: Event): void {
+		this.field().onInput?.(event);
+	}
+
+	onChange(event: Event): void {
+		this.field().onChange?.(event);
+	}
 }

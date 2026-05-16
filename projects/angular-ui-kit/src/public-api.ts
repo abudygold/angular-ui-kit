@@ -4,7 +4,6 @@
 
 // Components
 export * from './lib/components/autocomplete';
-export * from './lib/components/breadcrumb';
 export * from './lib/components/button';
 export * from './lib/components/checkbox';
 export * from './lib/components/chip';
@@ -18,8 +17,11 @@ export * from './lib/components/textarea';
 export * from './lib/components/textbox';
 export * from './lib/components/textbox-currency';
 
+// Services
+export * from './lib/shared/services';
+
 // Formly
-export * from './lib/formly';
+// export * from './lib/formly';
 
 // Directives
 export * from './lib/shared/directives';

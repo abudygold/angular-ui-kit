@@ -12,4 +12,8 @@ import { FormlyField } from '../../shared/model';
 })
 export class SlideToggle {
 	field = input.required<FormlyField>();
+
+	onChange(event: unknown): void {
+		this.field().onChange?.(event);
+	}
 }

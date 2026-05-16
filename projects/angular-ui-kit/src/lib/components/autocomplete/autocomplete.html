@@ -1,31 +1,35 @@
-<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
-	@if (field().config.label) {
-		<mat-label [class]="field().config.labelClass || ''">
-			{{ field().config.label }}
+@let formField = field();
+@let config = formField.config;
+
+<mat-form-field [appearance]="config.appearance || 'outline'" class="tw:w-full">
+	@if (config.label) {
+		<mat-label [class]="config.labelClass || ''">
+			{{ config.label }}
 		</mat-label>
 	}
 
 	<input
 		matInput
 		[value]="inputValue()"
-		[class]="field().config.inputClass || ''"
-		[placeholder]="field().config.placeholder || ''"
-		(input)="
-			onInput($any($event.target).value); field().onInput ? field().onInput?.($event) : null
-		"
-		[matAutocomplete]="auto" />
+		[class]="config.inputClass || ''"
+		[placeholder]="config.placeholder || ''"
+		[matAutocomplete]="auto"
+		(input)="onInput($event)"
+		(blur)="onBlur($event)" />
 
-	<mat-autocomplete
-		#auto="matAutocomplete"
-		(optionSelected)="
-			onSelect($event.option.value); field().onChange ? field().onChange?.($event) : null
-		">
-		@for (option of normalizedOptions(); track $index) {
+	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelect($event)">
+		@for (option of normalizedOptions(); track option.value) {
 			<mat-option [value]="option.value">
 				{{ option.label }}
 			</mat-option>
 		}
 	</mat-autocomplete>
-	
-    <mat-icon matSuffix>search</mat-icon>
+
+	<mat-icon matSuffix>search</mat-icon>
+
+	@if (config.hint) {
+		<mat-hint align="end" [class]="config.hintClass || ''">
+			{{ config.hint }}
+		</mat-hint>
+	}
 </mat-form-field>

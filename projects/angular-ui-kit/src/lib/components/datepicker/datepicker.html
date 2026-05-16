@@ -1,19 +1,30 @@
-<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
-	@if (field().config.label) {
-		<mat-label [class]="field().config.labelClass || ''">
-			{{ field().config.label }}
+@let formField = field();
+@let config = formField.config;
+
+<mat-form-field [appearance]="config.appearance || 'outline'" class="tw:w-full">
+	@if (config.label) {
+		<mat-label [class]="config.labelClass || ''">
+			{{ config.label }}
 		</mat-label>
 	}
 
 	<input
 		matInput
 		[matDatepicker]="picker"
-		[formField]="$any(field().control)"
-		[class]="field().config.inputClass || ''"
-		[min]="field().config.datepicker?.minDate || null"
-		[matDatepickerFilter]="field().config.datepicker?.filterDate || null"
-		(dateChange)="field().onChange ? field().onChange?.($event) : null" />
+		[formField]="$any(formField.control)"
+		[class]="config.inputClass || ''"
+		[placeholder]="config.placeholder || ''"
+		[min]="config.datepicker?.minDate || null"
+		[matDatepickerFilter]="config.datepicker?.filterDate || null"
+		(dateChange)="onChange($event)"
+		(blur)="onBlur($event)" />
 
 	<mat-datepicker-toggle matIconSuffix [for]="picker" />
-	<mat-datepicker #picker [dateClass]="$any(field().config.datepicker?.dateClass || null)" />
+	<mat-datepicker #picker [dateClass]="$any(config.datepicker?.dateClass || null)" />
+
+	@if (config.hint) {
+		<mat-hint align="end" [class]="config.hintClass || ''">
+			{{ config.hint }}
+		</mat-hint>
+	}
 </mat-form-field>
