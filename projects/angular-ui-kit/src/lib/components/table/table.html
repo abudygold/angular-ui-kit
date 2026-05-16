@@ -1,45 +1,44 @@
-@if (config()) {
+@if (config(); as table) {
 	<div
 		class="table-container"
-		[class.table-row]="config().isEmpty()"
-		[class.table-empty]="config().isEmpty()"
-		[class.loading]="config().isLoading()">
+		[class.table-empty]="table.isEmpty()"
+		[class.loading]="table.isLoading()">
 		<div class="table-wrapper">
 			<table
 				matSort
 				matSortDisableClear
 				mat-table
 				class="table"
-				[class]="config().tableClass"
-				[dataSource]="config().isServerSide() ? config().dataSource : fetchBootstrapData()"
-				[matSortActive]="
-					config().isSorter() ? config().sortActive || config().columns.at(0)?.key! : ''
-				"
-				[matSortDirection]="config().sortDirection"
-				(matSortChange)="sortChange.emit($event)">
-				<tr mat-header-row *matHeaderRowDef="headerRow" class="table-header"></tr>
+				[class]="table.tableClass"
+				[dataSource]="dataSource"
+				[matSortActive]="getSortActive(table)"
+				[matSortDirection]="getSortDirection(table)"
+				(matSortChange)="onSortChange($event)">
+				<tr mat-header-row *matHeaderRowDef="getHeaderRow(table)" class="table-header"></tr>
 
 				<tr
 					mat-row
-					*matRowDef="let row; columns: headerRow; let rowIndex = index"
+					*matRowDef="let row; columns: getHeaderRow(table); let rowIndex = index"
 					class="table-row"
-					[class.table-row-selected]="config().isSelected(row)"
+					[class.table-row-selected]="table.isSelected(row)"
 					(click)="selectData.emit(row)"
 					(mouseleave)="mouseOverChange.emit(null)"
 					(mouseover)="mouseOverChange.emit(row)"></tr>
 
-				@for (column of config().columns; track column; let index = $index) {
+				@for (column of table.columns; track column.key) {
 					<ng-container [matColumnDef]="column.key">
 						<th mat-header-cell *matHeaderCellDef>
 							@if (column.key === 'selection') {
-								<ng-container [ngTemplateOutlet]="selectionTemplate" />
+								@if (selectionTemplate) {
+									<ng-container [ngTemplateOutlet]="selectionTemplate" />
+								}
 							} @else {
 								<span
 									class="table-header"
 									mat-sort-header
 									[disableClear]="true"
-									[disabled]="!column.sortable"
-									[class.tw-font-normal]="!config().isSorter()">
+									[disabled]="isSortDisabled(table, column)"
+									[class.tw-font-normal]="!table.isSorter()">
 									{{ column.label }}
 								</span>
 							}
@@ -50,45 +49,45 @@
 							*matCellDef="let data; let i = index; let rowIndex = index"
 							(click)="disableClick($event, column.key)">
 							<div class="table-row-cell">
-								@switch (config().dataType[column.key].type) {
+								@let cellConfig = getCellConfig(table, column.key);
+								@let cellValue = getCellValue(table, data, column.key);
+
+								@switch (cellConfig.type) {
 									@case ('date') {
 										{{
-											getPropertyValue(data, column.key)
-												| date
-													: config().dataType[column.key].format ||
-															'mediumDate'
+											cellValue
+												? (cellValue
+													| date: cellConfig.format || 'mediumDate')
+												: '-'
 										}}
 									}
-									@case ('number') {
-										{{ getPropertyValue(data, column.key) }}
-									}
-									@case ('title') {
-										{{ getPropertyValue(data, column.key) | titlecase }}
-									}
 									@case ('currency') {
-										<!-- {{ 123456.789 | currencyIntl:'JPY':'ja-JP':0:0 }} -->
 										{{
-											getPropertyValue(data, column.key) || 0
+											getCurrencyValue(cellValue)
 												| currencyIntl
-													: config().dataType[column.key].currency
-													: config().dataType[column.key].locale
-													: config().dataType[column.key]
-															.minimumFractionDigits
-													: config().dataType[column.key]
-															.maximumFractionDigits
+													: cellConfig.currency
+													: cellConfig.locale
+													: cellConfig.minimumFractionDigits
+													: cellConfig.maximumFractionDigits
 										}}
 									}
 									@case ('custom') {
-										<ng-container
-											[ngTemplateOutlet]="customTemplate"
-											[ngTemplateOutletContext]="{
-												data: data,
-												key: column.key,
-												index: rowIndex,
-											}" />
+										@if (customTemplate) {
+											<ng-container
+												[ngTemplateOutlet]="customTemplate"
+												[ngTemplateOutletContext]="{
+													data: data,
+													key: column.key,
+													value: cellValue,
+													column: column,
+													index: rowIndex,
+												}" />
+										} @else {
+											{{ displayValue(cellValue) }}
+										}
 									}
 									@default {
-										{{ displayValue(getPropertyValue(data, column.key)) }}
+										{{ displayValue(cellValue) }}
 									}
 								}
 							</div>
@@ -96,40 +95,29 @@
 					</ng-container>
 				}
 
-				@if (config().isEmpty()) {
-					<ng-container>
-						<tr
-							mat-footer-row
-							*matFooterRowDef="['nodata']"
-							[hidden]="(config().dataSource || []).length">
-							<span> No Data Available </span>
-						</tr>
-					</ng-container>
-
-					<ng-container matColumnDef="nodata">
-						<td
-							mat-footer-row
-							*matFooterCellDef
-							class="border-empty"
-							[colSpan]="(config().columns || []).length">
+				<tr *matNoDataRow class="table-empty-row">
+					<td class="border-empty" [attr.colspan]="table.columns.length || 1">
+						@if (emptyStateTable) {
+							<ng-container [ngTemplateOutlet]="emptyStateTable" />
+						} @else {
 							No Data Available
-						</td>
-					</ng-container>
-				}
+						}
+					</td>
+				</tr>
 			</table>
 		</div>
 
-		@if (!config().isEmpty() && config().isPagination()) {
+		@if (!table.isEmpty() && table.isPagination()) {
 			<div class="table-pagination">
 				<lib-pagination
-					[pageIndex]="config().pageIndex"
-					[pageSize]="config().pageSize"
-					[totalItems]="config().dataTotal"
+					[pageIndex]="table.pageIndex"
+					[pageSize]="table.pageSize"
+					[totalItems]="getTotalItems(table)"
 					(pageChange)="onPageChange($event)" />
 			</div>
 		}
 
-		@if (config().isLoading()) {
+		@if (table.isLoading()) {
 			<div class="spinner-container">
 				<mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
 			</div>

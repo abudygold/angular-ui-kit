@@ -1,29 +1,32 @@
-<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
-	@if (field().config.label) {
-		<mat-label [class]="field().config.labelClass || ''">
-			{{ field().config.label }}
+@let formField = field();
+@let config = formField.config;
+
+<mat-form-field [appearance]="config.appearance || 'outline'" class="tw:w-full">
+	@if (config.label) {
+		<mat-label [class]="config.labelClass || ''">
+			{{ config.label }}
 		</mat-label>
 	}
 
 	<textarea
 		matInput
-		[formField]="$any(field().control)"
-		[rows]="field().config.textarea?.rows"
-		[class]="field().config.inputClass || ''"
-		[placeholder]="field().config.placeholder || ''"
-		(blur)="field().onBlur ? field().onBlur?.($event) : null"
-		(input)="field().onInput ? field().onInput?.($event) : null"
-		(change)="field().onChange ? field().onChange?.($event) : null"></textarea>
+		[formField]="$any(formField.control)"
+		[rows]="config.textarea?.rows"
+		[class]="config.inputClass || ''"
+		[placeholder]="config.placeholder || ''"
+		(blur)="onBlur($event)"
+		(input)="onInput($event)"
+		(change)="onChange($event)"></textarea>
 
-	@if (field().config.hint) {
-		<mat-hint align="end" [class]="field().config.hintClass || ''">
-			{{ field().config.hint }}
+	@if (config.hint) {
+		<mat-hint align="end" [class]="config.hintClass || ''">
+			{{ config.hint }}
 		</mat-hint>
 	}
 
-	@if (field().config.limit) {
-		<mat-hint align="end" [class]="field().config.hintClass || ''">
-			{{ $any(field().control().value()).length }} / {{ field().config.limit }}
+	@if (config.limit) {
+		<mat-hint align="end" [class]="config.hintClass || ''">
+			{{ valueLength() }} / {{ config.limit }}
 		</mat-hint>
 	}
 </mat-form-field>

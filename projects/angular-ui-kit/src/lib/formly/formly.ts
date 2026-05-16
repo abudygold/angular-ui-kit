@@ -14,25 +14,27 @@ import { SlideToggle } from '../components/slide-toggle';
 import { Textarea } from '../components/textarea';
 import { Textbox } from '../components/textbox';
 import { FormlyField, FormlyFormConfig } from '../shared/model';
+import { TextboxCurrency } from "../components/textbox-currency";
 
 @Component({
 	selector: 'lib-formly',
 	imports: [
-		NgTemplateOutlet,
-		MatExpansionModule,
-		MatButtonModule,
-		MatIconModule,
-		MatError,
-		Textbox,
-		Textarea,
-		Dropdown,
-		Checkbox,
-		RadioButton,
-		Autocomplete,
-		Datepicker,
-		SlideToggle,
-		Chip,
-	],
+    NgTemplateOutlet,
+    MatExpansionModule,
+    MatButtonModule,
+    MatIconModule,
+    MatError,
+    Textbox,
+    TextboxCurrency,
+    Textarea,
+    Dropdown,
+    Checkbox,
+    RadioButton,
+    Autocomplete,
+    Datepicker,
+    SlideToggle,
+    Chip,
+],
 	templateUrl: './formly.html',
 	styleUrl: './formly.css',
 })

@@ -1,9 +1,12 @@
+@let formField = field();
+@let config = formField.config;
+
 <p>
 	<mat-slide-toggle
-		[formField]="$any(field().control)"
-		[class]="field().config.inputClass || ''"
-		[labelPosition]="field().config.slideToggle?.labelPosition || 'after'"
-		(change)="field().onChange ? field().onChange?.($event) : null">
-		{{ field().config.slideToggle?.label || field().config.label }}
+		[formField]="$any(formField.control)"
+		[class]="config.inputClass || ''"
+		[labelPosition]="config.slideToggle?.labelPosition || 'after'"
+		(change)="onChange($event)">
+		{{ config.slideToggle?.label || config.label }}
 	</mat-slide-toggle>
 </p>

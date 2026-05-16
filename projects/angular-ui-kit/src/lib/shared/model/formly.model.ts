@@ -2,7 +2,7 @@ import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { FieldTree } from '@angular/forms/signals';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 
-type FormlyFieldType =
+export type FormlyFieldType =
 	| 'textbox'
 	| 'textarea'
 	| 'datepicker'
@@ -12,71 +12,108 @@ type FormlyFieldType =
 	| 'autocomplete'
 	| 'chip'
 	| 'slide-toggle'
+	| 'currency'
 	| 'array';
 
-type TextBoxType = 'text' | 'password' | 'email' | 'number' | 'textarea';
+export type FormlyTextboxType = 'text' | 'password' | 'email' | 'number' | 'textarea';
+export type FormlyAppearance = 'outline' | 'fill';
+export type FormlyLabelPosition = 'before' | 'after';
+export type FormlySignalControl = FieldTree<any, any>;
+export type FormlyControl = FormlySignalControl;
+export type FormlyEventHandler<TEvent = unknown> = (event: TEvent) => void;
+export type FormlyDateFilterFn<D> = (date: D | null) => boolean;
 
-type DateFilterFn<D> = (date: D | null) => boolean;
+export interface FormlyOptionsConfig<TOption = unknown> {
+	data?: TOption[];
+	labelKey?: string;
+	valueKey?: string;
+	filterKey?: string;
+	avatarKey?: string;
+}
 
-export interface FormlyBaseConfig {
+export interface FormlyCurrencyConfig {
+	currency?: string;
+	locale?: string;
+}
+
+export interface FormlyDatepickerConfig {
+	minDate?: Date;
+	dateClass?: MatCalendarCellClassFunction<Date>;
+	filterDate?: FormlyDateFilterFn<Date | null>;
+}
+
+export interface FormlyTextareaConfig {
+	rows?: number;
+}
+
+export interface FormlyInfiniteScrollConfig {
+	enabled?: boolean;
+	threshold?: string | number;
+	debounce?: number;
+	complete?: boolean;
+	loading?: boolean;
+	disabled?: boolean;
+	loadOnOpen?: boolean;
+}
+
+export interface FormlyDropdownConfig<TOption = unknown> {
+	options?: TOption[];
+	multiple?: boolean;
+	labelKey?: string;
+	valueKey?: string;
+	infiniteScroll?: boolean | FormlyInfiniteScrollConfig;
+}
+
+export interface FormlySlideToggleConfig {
 	label?: string;
+	labelPosition?: FormlyLabelPosition;
+}
+
+export interface FormlyCheckboxConfig {
+	isSelectAll?: boolean;
+	align?: FormlyLabelPosition;
+	selectAllLabel?: string;
+}
+
+export interface FormlyChipConfig {
+	removable?: boolean;
+	draggable?: boolean;
+	stacked?: boolean;
+	allowInput?: boolean;
+	inputPlaceholder?: string;
+	allowAutocomplete?: boolean;
+}
+
+export interface FormlyClassConfig {
 	labelClass?: string;
 	inputClass?: string;
 	optionClass?: string;
 	hintClass?: string;
 	selectAllClass?: string;
+}
+
+export interface FormlyBaseConfig<TOption = unknown> extends FormlyClassConfig {
+	label?: string;
 	placeholder?: string;
 	hint?: string;
 	limit?: number;
 	required?: boolean;
 	disabled?: boolean;
 	readonly?: boolean;
-	appearance?: 'outline' | 'fill';
-	textboxType?: TextBoxType;
-	texboxCurrency?: {
-		currency?: string;
-		locale?: string;
-	};
-	datepicker?: {
-		minDate?: Date;
-		dateClass?: MatCalendarCellClassFunction<Date>;
-		filterDate?: DateFilterFn<Date | null>;
-	};
-	textarea?: {
-		rows?: number;
-	};
-	dropdown?: {
-		options: any[];
-		multiple?: boolean;
-		labelKey?: string;
-		valueKey?: string;
-	};
-	slideToggle?: {
-		label?: string;
-		labelPosition?: 'before' | 'after';
-	};
-	checkbox?: {
-		isSelectAll?: boolean;
-		align?: 'before' | 'after';
-		selectAllLabel?: string;
-	};
-	chip?: {
-		removable?: boolean;
-		draggable?: boolean;
-		stacked?: boolean;
+	appearance?: FormlyAppearance;
+	textboxType?: FormlyTextboxType;
+	textboxCurrency?: FormlyCurrencyConfig;
 
-		/** input chip */
-		allowInput?: boolean;
-		inputPlaceholder?: string;
-		allowAutocomplete?: boolean;
-	};
-	options?: {
-		data: any[];
-		labelKey?: string;
-		valueKey?: string;
-		filterKey?: string;
-		avatarKey?: string;
-	};
+	/** @deprecated Use textboxCurrency instead. */
+	texboxCurrency?: FormlyCurrencyConfig;
+
+	datepicker?: FormlyDatepickerConfig;
+	textarea?: FormlyTextareaConfig;
+	dropdown?: FormlyDropdownConfig<TOption>;
+	slideToggle?: FormlySlideToggleConfig;
+	checkbox?: FormlyCheckboxConfig;
+	chip?: FormlyChipConfig;
+	options?: FormlyOptionsConfig<TOption>;
 }
 
 export interface FormlyValidation {
@@ -85,50 +122,45 @@ export interface FormlyValidation {
 	message?: Record<string, string>;
 }
 
-export interface FormlyField {
+export interface FormlyArrayItem<TDefault = unknown> {
+	defaultObject: TDefault;
+}
+
+export interface FormlyButtonClassConfig {
+	div?: string;
+	btn?: string;
+}
+
+export interface FormlyPanelClassConfig {
+	accordion?: string;
+	panel?: string;
+	header?: string;
+	title?: string;
+	content?: string;
+}
+
+export interface FormlyField<
+	TControl extends FormlySignalControl = FormlySignalControl,
+	TOption = unknown,
+> {
 	key: string;
+	type: FormlyFieldType;
+	control: TControl;
+	config: FormlyBaseConfig<TOption>;
 	title?: string;
 	addBtnLabel?: string;
-	type: FormlyFieldType;
-	control: FieldTree<any, any>;
-
-	// Default object to be added when addItem is called
-	addItem?: {
-		defaultObject: any;
-	};
-
+	addItem?: FormlyArrayItem;
 	formClass?: string;
 	fieldClass?: string;
-	removeClass?: {
-		div?: string;
-		btn?: string;
-	};
-	addClass?: {
-		div?: string;
-		btn?: string;
-	};
-	panelClass?: {
-		accordion?: string;
-		panel?: string;
-		header?: string;
-		title?: string;
-		content?: string;
-	};
-
-	// panelClass?: string;
-	// arrayDivClass?: string;
-	// removeButtonClass?: string;
-	// addButtonClass?: string;
-	// fieldClass?: string;
-
-	config: FormlyBaseConfig;
+	removeClass?: FormlyButtonClassConfig;
+	addClass?: FormlyButtonClassConfig;
+	panelClass?: FormlyPanelClassConfig;
 	validation?: FormlyValidation;
-
 	fields?: FormlyField[];
-
-	onInput?: (event: any) => void;
-	onBlur?: (event: any) => void;
-	onChange?: (event: any) => void;
+	onInput?: FormlyEventHandler;
+	onBlur?: FormlyEventHandler;
+	onChange?: FormlyEventHandler;
+	onInfiniteScroll?: FormlyEventHandler;
 }
 
 export interface FormlyFormConfig {

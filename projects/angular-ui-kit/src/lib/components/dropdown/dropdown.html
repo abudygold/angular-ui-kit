@@ -1,20 +1,38 @@
-<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
-	@if (field().config.label) {
-		<mat-label [class]="field().config.labelClass || ''">
-			{{ field().config.label }}
+@let formField = field();
+@let config = formField.config;
+@let infiniteScroll = infiniteScrollConfig;
+
+<mat-form-field [appearance]="config.appearance || 'outline'" class="tw:w-full">
+	@if (config.label) {
+		<mat-label [class]="config.labelClass || ''">
+			{{ config.label }}
 		</mat-label>
 	}
 
 	<mat-select
-		[formField]="$any(field().control)"
-		[class]="field().config.inputClass || ''"
-		[multiple]="field().config.dropdown?.multiple"
-		[placeholder]="field().config.placeholder || ''"
-		(selectionChange)="field().onChange ? field().onChange?.($event) : null">
-		@for (option of normalizedOptions(); track $index) {
-			<mat-option [value]="option.value" [class]="field().config.optionClass || ''">
+		msInfiniteScroll
+		[formField]="$any(formField.control)"
+		[class]="config.inputClass || ''"
+		[multiple]="config.dropdown?.multiple || false"
+		[placeholder]="config.placeholder || ''"
+		[threshold]="infiniteScroll.threshold"
+		[debounce]="infiniteScroll.debounce"
+		[complete]="infiniteScroll.complete"
+		[loading]="infiniteScroll.loading"
+		[loadOnOpen]="infiniteScroll.loadOnOpen"
+		[msInfiniteScrollDisabled]="!infiniteScroll.enabled || infiniteScroll.disabled"
+		(infiniteScroll)="onInfiniteScroll($event)"
+		(selectionChange)="onChange($event)">
+		@for (option of normalizedOptions(); track option.value) {
+			<mat-option [value]="option.value" [class]="config.optionClass || ''">
 				{{ option.label }}
 			</mat-option>
 		}
 	</mat-select>
+
+	@if (config.hint) {
+		<mat-hint align="end" [class]="config.hintClass || ''">
+			{{ config.hint }}
+		</mat-hint>
+	}
 </mat-form-field>

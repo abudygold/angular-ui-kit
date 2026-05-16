@@ -1,40 +1,46 @@
-@switch (config().buttonType) {
+@let button = config();
+@let isLoading = button.loading?.() || false;
+@let isDisabled = button.disabled?.() || isLoading;
+
+@switch (button.buttonType) {
 	@case ('link') {
-		<a mat-button [href]="config().href" [target]="config().target" [color]="config().color">
-			{{ config().text }}
+		<a mat-button [href]="button.href" [target]="button.target" [color]="button.color">
+			{{ button.text }}
 		</a>
 	}
+
 	@case ('icon') {
 		<button
 			mat-icon-button
-			[color]="config().color"
-			[disabled]="config().disabled?.() || config().loading?.()"
+			[color]="button.color"
+			[disabled]="isDisabled"
 			(click)="handleClick()">
-			@if (config().loading?.()) {
-				<mat-spinner diameter="20"></mat-spinner>
+			@if (isLoading) {
+				<mat-spinner diameter="20" />
 			} @else {
-				<mat-icon>{{ config().icon }}</mat-icon>
+				<mat-icon>{{ button.icon }}</mat-icon>
 			}
 		</button>
 	}
+
 	@default {
 		<button
 			mat-button
-			[attr.type]="config().buttonType ?? 'button'"
+			[attr.type]="button.buttonType ?? 'button'"
 			[class]="buttonClass"
-			[color]="config().color"
-			[disabled]="config().disabled?.() || config().loading?.()"
+			[color]="button.color"
+			[disabled]="isDisabled"
 			(click)="handleClick()">
-			@if (config().icon) {
+			@if (button.icon) {
 				<mat-icon>
-					{{ config().icon }}
+					{{ button.icon }}
 				</mat-icon>
 			}
 
-			@if (config().loading?.()) {
-				<mat-spinner diameter="18"></mat-spinner>
+			@if (isLoading) {
+				<mat-spinner diameter="18" />
 			} @else {
-				<span>{{ config().text }}</span>
+				<span>{{ button.text }}</span>
 			}
 		</button>
 	}

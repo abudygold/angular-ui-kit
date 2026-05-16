@@ -1,34 +1,27 @@
+@let formField = field();
+@let config = formField.config;
+
 <mat-chip-listbox
 	cdkDropList
 	cdkDropListOrientation="horizontal"
 	class="tw:mb-3"
-	[class.stacked]="field().config.chip?.stacked"
-	[cdkDropListDisabled]="!field().config.chip?.draggable"
+	[class.stacked]="config.chip?.stacked"
+	[cdkDropListDisabled]="!config.chip?.draggable"
 	(cdkDropListDropped)="onDrop($event)">
-	@for (chip of $any(field().control().value() || []); track $index) {
+	@for (chip of chips(); track $index) {
 		<mat-chip
 			cdkDrag
 			class="c_chip"
-			[disabled]="field().config.disabled"
-			[removable]="field().config.chip?.removable"
+			[disabled]="config.disabled"
+			[removable]="config.chip?.removable"
 			(removed)="onRemove(chip)">
-			@if (field().config.options?.avatarKey) {
-				<img
-					matChipAvatar
-					[src]="
-						field().config.options?.avatarKey
-							? chip[field().config.options?.avatarKey || '']
-							: chip
-					" />
+			@if (getAvatar(chip); as avatar) {
+				<img matChipAvatar [src]="avatar" />
 			}
 
-			{{
-				field().config.options?.labelKey
-					? chip[field().config.options?.labelKey || '']
-					: chip
-			}}
+			{{ getLabel(chip) }}
 
-			@if (field().config.chip?.removable) {
+			@if (config.chip?.removable) {
 				<button matChipRemove>
 					<mat-icon>cancel</mat-icon>
 				</button>
@@ -37,11 +30,11 @@
 	}
 </mat-chip-listbox>
 
-@if (field().config.chip?.allowInput) {
-	<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
-		@if (field().config.label) {
-			<mat-label [class]="field().config.labelClass || ''">
-				{{ field().config.label }}
+@if (config.chip?.allowInput) {
+	<mat-form-field [appearance]="config.appearance || 'outline'" class="tw:w-full">
+		@if (config.label) {
+			<mat-label [class]="config.labelClass || ''">
+				{{ config.label }}
 			</mat-label>
 		}
 
@@ -50,19 +43,19 @@
 		<input
 			matInput
 			#chipInput
-			[class]="field().config.inputClass || ''"
-			[placeholder]="field().config.chip?.inputPlaceholder ?? 'Add item'"
+			[class]="config.inputClass || ''"
+			[placeholder]="config.chip?.inputPlaceholder ?? 'Add item'"
 			[matChipInputFor]="chipGrid"
 			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 			(matChipInputTokenEnd)="addFromInput($event); chipInput.value = ''" />
 	</mat-form-field>
 }
 
-@if (field().config.chip?.allowAutocomplete) {
-	<mat-form-field [appearance]="field().config.appearance || 'outline'" class="tw:w-full">
-		@if (field().config.label) {
-			<mat-label [class]="field().config.labelClass || ''">
-				{{ field().config.label }}
+@if (config.chip?.allowAutocomplete) {
+	<mat-form-field [appearance]="config.appearance || 'outline'" class="tw:w-full">
+		@if (config.label) {
+			<mat-label [class]="config.labelClass || ''">
+				{{ config.label }}
 			</mat-label>
 		}
 
@@ -72,8 +65,8 @@
 			matInput
 			#chipInput
 			[matAutocomplete]="auto"
-			[class]="field().config.inputClass || ''"
-			[placeholder]="field().config.chip?.inputPlaceholder ?? 'Add item'"
+			[class]="config.inputClass || ''"
+			[placeholder]="config.chip?.inputPlaceholder ?? 'Add item'"
 			[matChipInputFor]="chipGrid"
 			[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 			(matChipInputTokenEnd)="addFromInput($event); chipInput.value = ''" />
@@ -82,17 +75,8 @@
 			#auto="matAutocomplete"
 			(optionSelected)="addFromAutocomplete($event); chipInput.value = ''">
 			@for (option of filteredOptions(); track option.value) {
-				<mat-option
-					[value]="
-						field().config.options?.valueKey
-							? option[field().config.options?.valueKey || '']
-							: option
-					">
-					{{
-						field().config.options?.labelKey
-							? option[field().config.options?.labelKey || '']
-							: option
-					}}
+				<mat-option [value]="option">
+					{{ option.label }}
 				</mat-option>
 			}
 		</mat-autocomplete>

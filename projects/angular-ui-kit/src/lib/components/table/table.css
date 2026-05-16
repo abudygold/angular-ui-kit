@@ -137,10 +137,22 @@
 		border-radius: 16px;
 		background-color: rgba(225, 225, 225, 0.6);
 	}
+
+	.table-pagination {
+		border-top: 1px solid #d4d4d8;
+	}
 }
 
 .border-empty {
+	height: 72px;
+	padding: 24px;
 	text-align: center;
+	color: #71717a;
+	background: #ffffff;
 	border-top: 1px solid rgba(143, 134, 147, 0.3);
 	border-bottom: 1px solid rgba(143, 134, 147, 0.3);
+}
+
+.table-empty-row {
+	height: 72px;
 }

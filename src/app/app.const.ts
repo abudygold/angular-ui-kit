@@ -8,6 +8,7 @@ export interface IExample {
 	dob: Date | null;
 	birthPlace: string;
 	age: number;
+	price: number;
 	hobbies: string[];
 	child: {
 		firstName: string;
@@ -170,6 +171,20 @@ export const FormConfig = (
 			fieldClass: 'tw:mb-3',
 			control: formData.age,
 			config: { label: 'Age', required: true, textboxType: 'number' },
+		},
+		{
+			key: 'price',
+			type: 'currency',
+			fieldClass: 'tw:mb-3',
+			control: formData.price,
+			config: {
+				label: 'Price',
+				required: true,
+				texboxCurrency: {
+					locale: 'id-ID',
+					currency: 'IDR',
+				},
+			},
 		},
 		{
 			key: 'hobbies',
